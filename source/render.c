@@ -46,12 +46,14 @@ void drawImage(char *path, int x, int y, int w, int h, int toX, int toY, int toW
     if (automatic) SDL_RenderPresent(renderer);
 }
 
-void drawText(char *text, int r, int g, int b, int a, int toX, int toY, char *font, int size)
+void drawText(char *text, int toX, int toY, char *font, int size)
 {
     font = strlen(font) > 0 ? font : "alkatip.ttf";
     size = get_min(get_max(size, 1), 100);
     TTF_Font *ttf = TTF_OpenFont(font, size);
     assert(ttf != NULL, "ttf open failed!");
+    Uint8 r, g, b, a;
+    SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
     SDL_Color color = {r, g, b, a};
     SDL_Surface *textSurface = TTF_RenderUTF8_Blended(ttf, text, color);
     SDL_Texture *textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
@@ -70,25 +72,67 @@ void drawText(char *text, int r, int g, int b, int a, int toX, int toY, char *fo
     if (automatic) SDL_RenderPresent(renderer);
 }
 
-void draw()
+void doClear()
 {
-
-    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-
-    SDL_SetRenderDrawColor(renderer, 50, 50, 50, 255);
     SDL_RenderClear(renderer);
+}
+
+void setColor( int r, int g, int b, int a)
+{
+    SDL_SetRenderDrawColor(renderer, r, g, b, a);
+}
+
+void drawPoint(int x, int y)
+{
+    SDL_RenderDrawPoint(renderer, x, y);
+    if (automatic) SDL_RenderPresent(renderer);
+}
+
+void drawLine(int x, int y, int toX, int toY)
+{
+    SDL_RenderDrawLine(renderer, x, y, toX, toY);
+    if (automatic) SDL_RenderPresent(renderer);
+}
+
+void drawRect(int x, int y, int w, int h)
+{
+    SDL_Rect rect = {x, y, w, h};
+    SDL_RenderDrawRect(renderer, &rect);
+    if (automatic) SDL_RenderPresent(renderer);
+}
+
+void fillRect(int x, int y, int w, int h)
+{
+    SDL_Rect rect = {w, y, w, h};
+    SDL_RenderFillRect(renderer, &rect);
+    if (automatic) SDL_RenderPresent(renderer);
+}
 
 
-    SDL_SetRenderDrawColor(renderer, 50, 50, 200, 255);
-    SDL_Rect rect1 = {200, 10, 50, 50};
-    SDL_RenderDrawRect(renderer, &rect1);
-    SDL_RenderPresent(renderer);
+void renderTest()
+{
+    setColor(50, 50, 50, 255);
+    doClear();
+    //
+    drawImage("./lua.png", 50, 0, 0, 0, 50, 300, 0, 0);
+    //
+    char *text1 = "Hello World!";
+    char *text2 = "!ﺎﻴﻧﯗﺩ ﺎﺑﺎﮬﺭﻪﻣ";
+    char *font = "ukij.ttf";
+    setColor(200, 0, 0, 255);
+    drawText(text1, 25, 200, font, 24);
+    drawText(text2, 25, 225, font, 36);
+    //
+    setColor(0, 200, 0, 255);
+    fillRect(50, 50, 50, 50);
+    //
+    setColor(0, 200, 0, 255);
+    drawRect(150, 50, 50, 50);
+    //
+    setColor(0, 0, 200, 255);
+    drawLine(10, 10, 300, 300);
+    drawPoint(5, 5);
 
-    // SDL_RenderDrawLine
-    // SDL_RenderDrawPoint
-    // SDL_RenderDrawRect
-
-    // SDL_RenderFillRect
 
     // SDL_RenderSetScale
     // SDL_SetRenderDrawColor
@@ -96,14 +140,5 @@ void draw()
     // SDL_RenderPresent
 
     // 
-
-
-
-
-
-    SDL_Rect rect2 = {200, 100, 50, 50};
-    SDL_SetRenderDrawColor(renderer, 50, 200, 50, 255);
-    SDL_RenderFillRect(renderer, &rect2);
-    SDL_RenderPresent(renderer);
     printf("\nEND!");
 }
