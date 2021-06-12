@@ -1,20 +1,24 @@
+// render
 
-
-#include <stdbool.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <string.h>
-#include <direct.h>
-#include <stdlib.h>
-
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
+#include "head.h"
 
 extern SDL_Renderer *renderer;
-extern SDL_Window *window;
 extern bool automatic;
+
+void setAuto(bool isAuto)
+{
+    automatic = isAuto;
+}
+
+void setBlend(int mode)
+{
+    SDL_SetRenderDrawBlendMode(renderer, mode);
+}
+
+void doRender()
+{
+    SDL_RenderPresent(renderer);
+}
 
 void drawImage(char *path, int x, int y, int w, int h, int toX, int toY, int toW, int toH, bool isFlipX, bool isFlipY, int angle, float anchorX, float anchorY)
 {
@@ -49,7 +53,7 @@ void drawImage(char *path, int x, int y, int w, int h, int toX, int toY, int toW
     SDL_RenderCopyEx(renderer, imageTexture, &srcRect, &sdtRect, angle, &point, flip);
     SDL_DestroyTexture(imageTexture);
     SDL_FreeSurface(imageSurface);
-    if (automatic) SDL_RenderPresent(renderer);
+    if (automatic) doRender();
 }
 
 void drawText(char *text, int toX, int toY, char *font, int size, bool isFlipX, bool isFlipY, int angle, float anchorX, float anchorY)
@@ -81,12 +85,13 @@ void drawText(char *text, int toX, int toY, char *font, int size, bool isFlipX, 
     TTF_CloseFont(ttf);
     SDL_FreeSurface(textSurface);
     SDL_DestroyTexture(textTexture);
-    if (automatic) SDL_RenderPresent(renderer);
+    if (automatic) doRender();
 }
 
 void doClear()
 {
     SDL_RenderClear(renderer);
+    if (automatic) doRender();
 }
 
 void setColor( int r, int g, int b, int a)
@@ -94,9 +99,21 @@ void setColor( int r, int g, int b, int a)
     SDL_SetRenderDrawColor(renderer, r, g, b, a);
 }
 
+void getColor()
+{
+    Uint8 r, g, b, a;
+    SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
+}
+
 void setScale(float scaleX, float scaleY)
 {
     SDL_RenderSetScale(renderer, scaleX, scaleY);
+}
+
+void getScale()
+{
+    float x, y;
+    SDL_RenderGetScale(renderer, &x, &y);
 }
 
 void setPort(int x, int y, int w, int h)
@@ -105,36 +122,49 @@ void setPort(int x, int y, int w, int h)
     SDL_RenderSetViewport(renderer, &rect);
 }
 
+void getPort()
+{
+    SDL_Rect rect;
+    SDL_RenderGetViewport(renderer, &rect);
+}
+
 void setClip(int x, int y, int w, int h)
 {
     SDL_Rect rect = {x, y, w, h};
     SDL_RenderSetClipRect(renderer, &rect);
 }
 
+void getClip()
+{
+    SDL_Rect rect;
+    SDL_RenderGetClipRect(renderer, &rect);
+}
+
+
 void drawPoint(int x, int y)
 {
     SDL_RenderDrawPoint(renderer, x, y);
-    if (automatic) SDL_RenderPresent(renderer);
+    if (automatic) doRender();
 }
 
 void drawLine(int x, int y, int toX, int toY)
 {
     SDL_RenderDrawLine(renderer, x, y, toX, toY);
-    if (automatic) SDL_RenderPresent(renderer);
+    if (automatic) doRender();
 }
 
 void drawRect(int x, int y, int w, int h)
 {
     SDL_Rect rect = {x, y, w, h};
     SDL_RenderDrawRect(renderer, &rect);
-    if (automatic) SDL_RenderPresent(renderer);
+    if (automatic) doRender();
 }
 
 void fillRect(int x, int y, int w, int h)
 {
     SDL_Rect rect = {x, y, w, h};
     SDL_RenderFillRect(renderer, &rect);
-    if (automatic) SDL_RenderPresent(renderer);
+    if (automatic) doRender();
 }
 
 
@@ -162,13 +192,4 @@ void renderTest()
     setColor(0, 0, 200, 255);
     drawLine(10, 10, 300, 300);
     drawPoint(5, 5);
-
-
-    // SDL_RenderSetScale
-    // SDL_SetRenderDrawColor
-    // SDL_RenderClear
-    // SDL_RenderPresent
-
-    // 
-    printf("\nEND!");
 }

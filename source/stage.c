@@ -3,11 +3,12 @@
 // http://blog.chinaunix.net/uid-20587912-id-405049.html
 // https://blog.csdn.net/leixiaohua1020/article/details/40701203
 
+#include "head.h"
 #include "tools.c"
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
+#include "window.c"
 #include "render.c"
+#include "others.c"
+#include "test.c"
 
 // config
 const char *CONFIG_NAME = "config.txt";
@@ -26,7 +27,6 @@ char *windowSizeState = "EMPTY";
 
 // sdl
 SDL_Window *window = NULL;
-SDL_Surface *surface = NULL;
 SDL_Renderer *renderer = NULL;
 bool automatic = false;
 
@@ -51,6 +51,8 @@ void getArgs(char *left, char *right)
         windowOnTop = is_similar(right, "TRUE");
     else if (is_similar(left, "WINDOW_SKIP_TASK"))
         windowSkipTask = is_similar(right, "TRUE");
+    else if (is_similar(left, "IS_AUTO_RENDER"))
+        automatic = is_similar(right, "TRUE");
     else if (is_similar(left, "WINDOW_SIZE_STATE"))
         windowSizeState = right;
     else
@@ -83,7 +85,6 @@ void parseConfig()
 void exitMain()
 {
     SDL_DestroyRenderer(renderer);
-    SDL_FreeSurface(surface);
     SDL_DestroyWindow(window);
     SDL_Quit();
     exit(EXIT_SUCCESS);
@@ -147,142 +148,6 @@ void handleEvent(SDL_Event event)
     }
 }
 
-// -------------------------------------------------------------------------------------------------------------------------------------------
-
-uint32_t getTick()
-{
-    return SDL_GetTicks();
-}
-
-void setAuto(bool isAuto)
-{
-    automatic = isAuto;
-}
-
-void update()
-{
-    SDL_UpdateWindowSurface(window);
-}
-
-void show()
-{
-    SDL_ShowWindow(window);
-}
-
-void hide()
-{
-    SDL_HideWindow(window);
-}
-
-void maximaze()
-{
-    SDL_MaximizeWindow(window);
-}
-
-void minimaze()
-{
-    SDL_MinimizeWindow(window);
-}
-
-void setTitle(char *title)
-{
-    SDL_SetWindowTitle(window, title);
-}
-
-const char *getTitle()
-{
-    return SDL_GetWindowTitle(window);
-}
-
-void setPosition(int x, int y)
-{
-    SDL_SetWindowPosition(window, x, y);
-}
-
-void getPosition()
-{
-    int x;
-    int y;
-    SDL_GetWindowPosition(window, &x, &y);
-}
-
-void setSize(int w, int h)
-{
-    SDL_SetWindowSize(window, w, h);
-}
-
-void getSize()
-{
-    int w;
-    int h;
-    SDL_GetWindowSize(window, &w, &h);
-}
-
-void setFullscreen(bool isFullscreen)
-{
-    SDL_SetWindowFullscreen(window, isFullscreen ? SDL_WINDOW_FULLSCREEN_DESKTOP : 0); 
-}
-
-void showCursor(bool isShow)
-{
-    SDL_ShowCursor(isShow ? 1 : 0);
-}
-
-void setIcon(char *path)
-{
-    Uint16 pixels[16*16] = {  // ...or with raw pixel data:
-        0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff,
-        0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff,
-        0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff,
-        0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff,
-        0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff,
-        0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff,
-        0x0fff, 0x0aab, 0x0789, 0x0bcc, 0x0eee, 0x09aa, 0x099a, 0x0ddd,
-        0x0fff, 0x0eee, 0x0899, 0x0fff, 0x0fff, 0x1fff, 0x0dde, 0x0dee,
-        0x0fff, 0xabbc, 0xf779, 0x8cdd, 0x3fff, 0x9bbc, 0xaaab, 0x6fff,
-        0x0fff, 0x3fff, 0xbaab, 0x0fff, 0x0fff, 0x6689, 0x6fff, 0x0dee,
-        0xe678, 0xf134, 0x8abb, 0xf235, 0xf678, 0xf013, 0xf568, 0xf001,
-        0xd889, 0x7abc, 0xf001, 0x0fff, 0x0fff, 0x0bcc, 0x9124, 0x5fff,
-        0xf124, 0xf356, 0x3eee, 0x0fff, 0x7bbc, 0xf124, 0x0789, 0x2fff,
-        0xf002, 0xd789, 0xf024, 0x0fff, 0x0fff, 0x0002, 0x0134, 0xd79a,
-        0x1fff, 0xf023, 0xf000, 0xf124, 0xc99a, 0xf024, 0x0567, 0x0fff,
-        0xf002, 0xe678, 0xf013, 0x0fff, 0x0ddd, 0x0fff, 0x0fff, 0xb689,
-        0x8abb, 0x0fff, 0x0fff, 0xf001, 0xf235, 0xf013, 0x0fff, 0xd789,
-        0xf002, 0x9899, 0xf001, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0xe789,
-        0xf023, 0xf000, 0xf001, 0xe456, 0x8bcc, 0xf013, 0xf002, 0xf012,
-        0x1767, 0x5aaa, 0xf013, 0xf001, 0xf000, 0x0fff, 0x7fff, 0xf124,
-        0x0fff, 0x089a, 0x0578, 0x0fff, 0x089a, 0x0013, 0x0245, 0x0eff,
-        0x0223, 0x0dde, 0x0135, 0x0789, 0x0ddd, 0xbbbc, 0xf346, 0x0467,
-        0x0fff, 0x4eee, 0x3ddd, 0x0edd, 0x0dee, 0x0fff, 0x0fff, 0x0dee,
-        0x0def, 0x08ab, 0x0fff, 0x7fff, 0xfabc, 0xf356, 0x0457, 0x0467,
-        0x0fff, 0x0bcd, 0x4bde, 0x9bcc, 0x8dee, 0x8eff, 0x8fff, 0x9fff,
-        0xadee, 0xeccd, 0xf689, 0xc357, 0x2356, 0x0356, 0x0467, 0x0467,
-        0x0fff, 0x0ccd, 0x0bdd, 0x0cdd, 0x0aaa, 0x2234, 0x4135, 0x4346,
-        0x5356, 0x2246, 0x0346, 0x0356, 0x0467, 0x0356, 0x0467, 0x0467,
-        0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff,
-        0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff,
-        0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff,
-        0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff, 0x0fff
-    };
-    SDL_Surface *icon = SDL_CreateRGBSurfaceFrom(pixels,16,16,16,16*2,0x0f00,0x00f0,0x000f,0xf000);
-    // SDL_Surface *icon = IMG_Load(path);
-    SDL_SetWindowIcon(window, icon);
-}
-
-void getInfo()
-{
-    int windowW, windowH;
-    SDL_GetWindowSize(window, &windowW, &windowH);
-    SDL_Rect portRect;
-    SDL_RenderGetViewport(renderer, &portRect);
-    SDL_Rect clipRect;
-    SDL_RenderGetClipRect(renderer, &clipRect);
-    float scaleX, scaleY;
-    SDL_RenderGetScale(renderer, &scaleX, &scaleY);
-}
-
-// -------------------------------------------------------------------------------------------------------------------------------------------
-
 // main entrance
 int main(int argc, char **argv)
 {
@@ -313,15 +178,9 @@ int main(int argc, char **argv)
         windowHeight,
         flag
     );
-    // icon
-    setIcon("");
-    // initialize
-    surface = SDL_GetWindowSurface(window);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
-    setAuto(true);
     // test
-    renderTest();
+    testCode();
     // frame time
     windowFrameCount = get_max(windowFrameCount, 0);
     windowFrameCount = get_min(windowFrameCount, 60);
