@@ -4,7 +4,8 @@
 // https://blog.csdn.net/leixiaohua1020/article/details/40701203
 
 #include "tools.c"
-#include <SDL2/SDL.h>
+#include <SDL.h>
+#include <SDL_image.h>
 
 // config
 const char *CONFIG_NAME = "config.txt";
@@ -78,6 +79,7 @@ void parseConfig()
 
 void exitMain()
 {
+    SDL_FreeSurface(surface);
     SDL_DestroyWindow(window);
     SDL_Quit();
     exit(EXIT_SUCCESS);
@@ -263,13 +265,27 @@ void setIcon(char *path)
     SDL_SetWindowIcon(window, icon);
 }
 
-void fillRect(int x, int y, int w, int h, int r, int g, int b, int a)
+void drawRect(int x, int y, int w, int h, int r, int g, int b, int a)
 {
     SDL_Rect rect = {x, y, w, h};
     SDL_FillRect(surface, &rect, SDL_MapRGBA(surface->format, r, g, b, a));
-    if (!automatic)
-        return;
-    update();
+    if (automatic) update();
+}
+
+void drawImage(char *path, int x, int y, int w, int h, int toX, int toY)
+{
+    SDL_Surface *image = IMG_Load(path);
+    int imageW = image->w;
+    int imageH = image->h;
+    x = get_min(get_max(x, 0), imageW);
+    y = get_min(get_max(y, 0), imageH);
+    w = get_min(get_max(w, 0), imageW);
+    h = get_min(get_max(h, 0), imageH);
+    SDL_Rect rect1 = {x, y, w, h};
+    SDL_Rect rect2 = {toX, toY, 0, 0};
+    SDL_BlitSurface(image, &rect1, surface, &rect2);
+    SDL_FreeSurface(image);
+    if (automatic) update();
 }
 
 // -------------------------------------------------------------------------------------------------------------------------------------------
@@ -308,8 +324,9 @@ int main(int argc, char **argv)
     surface = SDL_GetWindowSurface(window);
     setAuto(true);
     // test
-    fillRect(0, 0, windowWidth, windowHeight, 0, 100, 0, 255);
-    fillRect(50, 50, 100, 100, 100, 50, 100, 255);
+    drawRect(0, 0, windowWidth, windowHeight, 0, 100, 0, 255);
+    drawRect(50, 50, 100, 100, 100, 50, 100, 255);
+    drawImage("./lua.png", 50, 0, 100, 100, 50, 50);
     //
     // SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     // SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
