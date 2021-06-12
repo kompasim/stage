@@ -120,14 +120,16 @@ void handleEvent(SDL_Event event)
     {
         if (event.key.keysym.sym == SDLK_F1)
         {
-            message("f1 down"); // SDL_KeyCode
+            // message("f1 down"); // SDL_KeyCode
+            testF1();
         }
     }
     else if (event.type == SDL_KEYUP) // Key released
     {
         if (event.key.keysym.sym == SDLK_F2)
         {
-            message("f1 up"); // SDL_KeyCode
+            // message("f1 up"); // SDL_KeyCode
+            testF2();
         }
     }
     else if (event.type == SDL_MOUSEBUTTONDOWN) // Mouse button pressed
