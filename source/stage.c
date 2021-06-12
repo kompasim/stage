@@ -275,17 +275,33 @@ void drawRect(int x, int y, int w, int h, int r, int g, int b, int a)
 
 void drawImage(char *path, int x, int y, int w, int h, int toX, int toY)
 {
-    SDL_Surface *image = IMG_Load(path);
-    int imageW = image->w;
-    int imageH = image->h;
+    SDL_Surface *imageSurface = IMG_Load(path);
+    int imageW = imageSurface->w;
+    int imageH = imageSurface->h;
     x = get_min(get_max(x, 0), imageW);
     y = get_min(get_max(y, 0), imageH);
     w = get_min(get_max(w, 0), imageW);
     h = get_min(get_max(h, 0), imageH);
-    SDL_Rect rect1 = {x, y, w, h};
-    SDL_Rect rect2 = {toX, toY, 0, 0};
-    SDL_BlitSurface(image, &rect1, surface, &rect2);
-    SDL_FreeSurface(image);
+    SDL_Rect srcRect = {x, y, w, h};
+    SDL_Rect sdtRect = {toX, toY, 0, 0};
+    SDL_BlitSurface(imageSurface, &srcRect, surface, &sdtRect);
+    SDL_FreeSurface(imageSurface);
+    if (automatic) update();
+}
+
+void drawText(char *text, int r, int g, int b, int a, int toX, int toY, char *font, int size)
+{
+    font = strlen(font) > 0 ? font : "alkatip.ttf";
+    printf("[%s]", font);
+    size = get_min(get_max(size, 1), 100);
+    TTF_Font *ttf = TTF_OpenFont(font, size);
+    assert(ttf != NULL, "ttf open failed!");
+    SDL_Color color = {r, g, b, a};
+    SDL_Surface *textSurface = TTF_RenderUTF8_Blended(ttf, text, color);
+    SDL_Rect srcRect = {0, 0, textSurface->w, textSurface->h};
+    SDL_Rect sdtRect = {toX, toY, 0, 0};
+    SDL_BlitSurface(textSurface, &srcRect, surface, &sdtRect);
+    TTF_CloseFont(ttf);
     if (automatic) update();
 }
 
@@ -295,7 +311,6 @@ void drawImage(char *path, int x, int y, int w, int h, int toX, int toY)
 int main(int argc, char **argv)
 {
     // config
-    assert(SDL_Init(SDL_INIT_EVERYTHING) == 0, "sdl init failed!");
     parseConfig();
     // flag
     Uint32 flag = SDL_WINDOW_OPENGL;
@@ -310,6 +325,9 @@ int main(int argc, char **argv)
         flag = flag | SDL_WINDOW_MAXIMIZED;
     else if (is_similar(windowSizeState, "MIN"))
         flag = flag | SDL_WINDOW_MINIMIZED;
+    // init
+    assert(TTF_Init() == 0, "ttf init failed!");
+    assert(SDL_Init(SDL_INIT_EVERYTHING) == 0, "sdl init failed!");
     // window
     window = SDL_CreateWindow(
         windowTitle,
@@ -328,14 +346,11 @@ int main(int argc, char **argv)
     drawRect(0, 0, windowWidth, windowHeight, 0, 100, 0, 255);
     drawRect(50, 50, 100, 100, 100, 50, 100, 255);
     drawImage("./lua.png", 50, 0, 100, 100, 50, 50);
-    //
-    // SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    // SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    //
-    //
-    // SDL_Rect rect = {75, 75, 100, 100};
-    // SDL_MaximizeWindow(window);
-    // SDL_Delay(500);
+    char *text1 = "Hello World!";
+    char *text2 = "!ﺎﻴﻧﯗﺩ ﺎﺑﺎﮬﺭﻪﻣ";
+    char *font = "ukij.ttf";
+    drawText(text1, 200, 50, 50, 255, 25, 200, font, 24);
+    drawText(text2, 200, 50, 50, 255, 25, 225, font, 36);
     //
 
     // frame time
