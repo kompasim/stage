@@ -16,7 +16,7 @@ extern SDL_Renderer *renderer;
 extern SDL_Window *window;
 extern bool automatic;
 
-void drawImage(char *path, int x, int y, int w, int h, int toX, int toY, int toW, int toH)
+void drawImage(char *path, int x, int y, int w, int h, int toX, int toY, int toW, int toH, bool isFlipX, bool isFlipY, int angle, float anchorX, float anchorY)
 {
     SDL_Surface *imageSurface = IMG_Load(path);
     SDL_Texture *imageTexture = SDL_CreateTextureFromSurface(renderer, imageSurface);
@@ -38,15 +38,21 @@ void drawImage(char *path, int x, int y, int w, int h, int toX, int toY, int toW
     toH = get_min(get_max(toH, 0), windowH);
     toW = toW > 0 ? toW : leftW;
     toH = toH > 0 ? toH : leftH;
+    int indentX = toW * anchorX;
+    int indentY = toH * anchorY;
     SDL_Rect srcRect = {x, y, w, h};
-    SDL_Rect sdtRect = {toX, toY, toW, toH};
-    SDL_RenderCopy(renderer, imageTexture, &srcRect, &sdtRect);
+    SDL_Rect sdtRect = {toX - indentX, toY - indentY, toW, toH};
+    SDL_RendererFlip flip = SDL_FLIP_NONE;
+    if (isFlipX) flip |= SDL_FLIP_HORIZONTAL;
+    if (isFlipY) flip |= SDL_FLIP_VERTICAL;
+    SDL_Point point = {toW * anchorX, toW * anchorY};
+    SDL_RenderCopyEx(renderer, imageTexture, &srcRect, &sdtRect, angle, &point, flip);
     SDL_DestroyTexture(imageTexture);
     SDL_FreeSurface(imageSurface);
     if (automatic) SDL_RenderPresent(renderer);
 }
 
-void drawText(char *text, int toX, int toY, char *font, int size)
+void drawText(char *text, int toX, int toY, char *font, int size, bool isFlipX, bool isFlipY, int angle, float anchorX, float anchorY)
 {
     font = strlen(font) > 0 ? font : "alkatip.ttf";
     size = get_min(get_max(size, 1), 100);
@@ -63,9 +69,15 @@ void drawText(char *text, int toX, int toY, char *font, int size)
     SDL_GetWindowSize(window, &windowW, &windowH);
     toX = get_min(get_max(toX, 0), windowW);
     toY = get_min(get_max(toY, 0), windowH);
+    int indentX = textureW * anchorX;
+    int indentY = textureH * anchorY;
     SDL_Rect srcRect = {0, 0, textureW, textureH};
-    SDL_Rect sdtRect = {toX, toY, textureW, textureH};
-    SDL_RenderCopy(renderer, textTexture, &srcRect, &sdtRect);
+    SDL_Rect sdtRect = {toX - indentX, toY - indentY, textureW, textureH};
+    SDL_RendererFlip flip = SDL_FLIP_NONE;
+    if (isFlipX) flip |= SDL_FLIP_HORIZONTAL;
+    if (isFlipY) flip |= SDL_FLIP_VERTICAL;
+    SDL_Point point = {textureW * anchorX, textureH * anchorY};
+    SDL_RenderCopyEx(renderer, textTexture, &srcRect, &sdtRect, angle, &point, flip);
     TTF_CloseFont(ttf);
     SDL_FreeSurface(textSurface);
     SDL_DestroyTexture(textTexture);
@@ -103,7 +115,7 @@ void drawRect(int x, int y, int w, int h)
 
 void fillRect(int x, int y, int w, int h)
 {
-    SDL_Rect rect = {w, y, w, h};
+    SDL_Rect rect = {x, y, w, h};
     SDL_RenderFillRect(renderer, &rect);
     if (automatic) SDL_RenderPresent(renderer);
 }
@@ -114,20 +126,21 @@ void renderTest()
     setColor(50, 50, 50, 255);
     doClear();
     //
-    drawImage("./lua.png", 50, 0, 0, 0, 50, 300, 0, 0);
+    drawImage("./lua.png", 0, 0, 0, 0, 100, 350, 0, 0, false, false, 0, 0.5, 0.5);
     //
     char *text1 = "Hello World!";
     char *text2 = "!ﺎﻴﻧﯗﺩ ﺎﺑﺎﮬﺭﻪﻣ";
     char *font = "ukij.ttf";
     setColor(200, 0, 0, 255);
-    drawText(text1, 25, 200, font, 24);
-    drawText(text2, 25, 225, font, 36);
+    drawText(text1, 100, 200, font, 24, true, false, 0, 0.5, 0.5);
+    drawText(text1, 100, 225, font, 24, false, false, 0, 0.5, 0.5);
+    drawText(text2, 100, 250, font, 24, false, false, 0, 0.5, 0.5);
     //
     setColor(0, 200, 0, 255);
-    fillRect(50, 50, 50, 50);
+    fillRect(150, 50, 50, 50);
     //
     setColor(0, 200, 0, 255);
-    drawRect(150, 50, 50, 50);
+    drawRect(250, 50, 50, 50);
     //
     setColor(0, 0, 200, 255);
     drawLine(10, 10, 300, 300);
