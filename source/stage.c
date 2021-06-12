@@ -131,19 +131,19 @@ void handleEvent(SDL_Event event)
     }
     else if (event.type == SDL_MOUSEBUTTONDOWN) // Mouse button pressed
     {
-        // printf("\nSDL_MOUSEBUTTONDOWN");
+        // printf("\nSDL_MOUSEBUTTONDOWN: key:[%d]", event.button.button); // left 1, middle 2, right 3
     }
     else if (event.type == SDL_MOUSEBUTTONUP) // Mouse button released
     {
-        // printf("\nSDL_MOUSEBUTTONUP");
+        // printf("\nSDL_MOUSEBUTTONUP: key:[%d]", event.button.button); // left 1, middle 2, right 3
     }
     else if (event.type == SDL_MOUSEMOTION) // Mouse moved
     {
-        // printf("\nSDL_MOUSEMOTION");
+        // printf("\nSDL_MOUSEMOTION: x:[%d] y:[%d]", event.button.x, event.button.y);
     }
     else if (event.type == SDL_MOUSEWHEEL) // Mouse wheel motion
     {
-        // printf("\nSDL_MOUSEWHEEL");
+        // printf("\nSDL_MOUSEWHEEL: wheel:[%d]", event.wheel.y); // forward 1, backward -1
     }
 }
 
@@ -277,7 +277,7 @@ void getInfo()
     SDL_RenderGetViewport(renderer, &portRect);
     SDL_Rect clipRect;
     SDL_RenderGetClipRect(renderer, &clipRect);
-    int scaleX, scaleY;
+    float scaleX, scaleY;
     SDL_RenderGetScale(renderer, &scaleX, &scaleY);
 }
 

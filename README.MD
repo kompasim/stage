@@ -1,12 +1,24 @@
-## SDL2
+## Stage
 
-* download sdl2 (http://www.libsdl.org/release/SDL2-devel-2.0.14-mingw.tar.gz)
-* unzip the compressed file
-* copy `SDL2-2.0.14\x86_64-w64-mingw32\` to `./SDL2/` directory 
-* copy `SDL2-2.0.14\x86_64-w64-mingw32\bin\SDL2.dll` to the root directory (executable program need this file in runtime)
-* install msys2 (https://www.msys2.org/)
-* install mingw in msys2 with `pacman -S mingw-w64-x86_64-toolchain base-devel`
-* comfirm gcc is the one just we downloaded with `which gcc`
-* build program with commands below
-  * with console：`gcc test.c -I path\include -L path\lib -l SDL2`
-  * without console：`gcc test.c -I path\include -L path\lib -l SDL2 -mwindows`
+### 0.Aboud
+
+> this is a SDL2 program implementation, we can be able to controll every pixels in the stage with lua scripts.
+
+### 1.Run Example program
+
+> just download this repository and click `windows/stage.exe`
+
+## 2.Build Source code
+
+* download libraries (read the `library/README.MD` file for more information)
+* install (msys2)[https://www.msys2.org/]
+* install mingw (run `pacman -S mingw-w64-x86_64-toolchain base-devel` in msys2 terminal)
+* install (chocolatey)[https://chocolatey.org/]
+* install make (run `choco install make`)
+* then run `make` command in root directory
+
+## 3.others
+
+> still under development, this is demo:
+
+![](./others/demo.png)
