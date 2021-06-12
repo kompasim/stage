@@ -7,6 +7,7 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include "render.c"
 
 // config
 const char *CONFIG_NAME = "config.txt";
@@ -26,6 +27,7 @@ char *windowSizeState = "EMPTY";
 // sdl
 SDL_Window *window = NULL;
 SDL_Surface *surface = NULL;
+SDL_Renderer *renderer = NULL;
 bool automatic = false;
 
 // set args
@@ -80,6 +82,7 @@ void parseConfig()
 
 void exitMain()
 {
+    SDL_DestroyRenderer(renderer);
     SDL_FreeSurface(surface);
     SDL_DestroyWindow(window);
     SDL_Quit();
@@ -273,38 +276,6 @@ void drawRect(int x, int y, int w, int h, int r, int g, int b, int a)
     if (automatic) update();
 }
 
-void drawImage(char *path, int x, int y, int w, int h, int toX, int toY)
-{
-    SDL_Surface *imageSurface = IMG_Load(path);
-    int imageW = imageSurface->w;
-    int imageH = imageSurface->h;
-    x = get_min(get_max(x, 0), imageW);
-    y = get_min(get_max(y, 0), imageH);
-    w = get_min(get_max(w, 0), imageW);
-    h = get_min(get_max(h, 0), imageH);
-    SDL_Rect srcRect = {x, y, w, h};
-    SDL_Rect sdtRect = {toX, toY, 0, 0};
-    SDL_BlitSurface(imageSurface, &srcRect, surface, &sdtRect);
-    SDL_FreeSurface(imageSurface);
-    if (automatic) update();
-}
-
-void drawText(char *text, int r, int g, int b, int a, int toX, int toY, char *font, int size)
-{
-    font = strlen(font) > 0 ? font : "alkatip.ttf";
-    printf("[%s]", font);
-    size = get_min(get_max(size, 1), 100);
-    TTF_Font *ttf = TTF_OpenFont(font, size);
-    assert(ttf != NULL, "ttf open failed!");
-    SDL_Color color = {r, g, b, a};
-    SDL_Surface *textSurface = TTF_RenderUTF8_Blended(ttf, text, color);
-    SDL_Rect srcRect = {0, 0, textSurface->w, textSurface->h};
-    SDL_Rect sdtRect = {toX, toY, 0, 0};
-    SDL_BlitSurface(textSurface, &srcRect, surface, &sdtRect);
-    TTF_CloseFont(ttf);
-    if (automatic) update();
-}
-
 // -------------------------------------------------------------------------------------------------------------------------------------------
 
 // main entrance
@@ -341,17 +312,19 @@ int main(int argc, char **argv)
     setIcon("");
     // surface
     surface = SDL_GetWindowSurface(window);
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
     setAuto(true);
     // test
     drawRect(0, 0, windowWidth, windowHeight, 0, 100, 0, 255);
     drawRect(50, 50, 100, 100, 100, 50, 100, 255);
-    drawImage("./lua.png", 50, 0, 100, 100, 50, 50);
+    //
+    draw();
+    drawImage("./lua.png", 50, 0, 0, 0, 50, 300, 0, 0);
     char *text1 = "Hello World!";
     char *text2 = "!ﺎﻴﻧﯗﺩ ﺎﺑﺎﮬﺭﻪﻣ";
     char *font = "ukij.ttf";
     drawText(text1, 200, 50, 50, 255, 25, 200, font, 24);
     drawText(text2, 200, 50, 50, 255, 25, 225, font, 36);
-    //
 
     // frame time
     windowFrameCount = get_max(windowFrameCount, 0);
