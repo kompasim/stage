@@ -6,6 +6,7 @@
 #include "tools.c"
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 // config
 const char *CONFIG_NAME = "config.txt";

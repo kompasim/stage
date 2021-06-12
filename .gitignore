@@ -1,4 +1,5 @@
 .vscode
 library/SDL2-*
 library/SDL2_image-*
+library/SDL2_ttf-*
 library/lua-*
