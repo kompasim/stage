@@ -94,6 +94,23 @@ void setColor( int r, int g, int b, int a)
     SDL_SetRenderDrawColor(renderer, r, g, b, a);
 }
 
+void setScale(float scaleX, float scaleY)
+{
+    SDL_RenderSetScale(renderer, scaleX, scaleY);
+}
+
+void setPort(int x, int y, int w, int h)
+{
+    SDL_Rect rect = {x, y, w, h};
+    SDL_RenderSetViewport(renderer, &rect);
+}
+
+void setClip(int x, int y, int w, int h)
+{
+    SDL_Rect rect = {x, y, w, h};
+    SDL_RenderSetClipRect(renderer, &rect);
+}
+
 void drawPoint(int x, int y)
 {
     SDL_RenderDrawPoint(renderer, x, y);

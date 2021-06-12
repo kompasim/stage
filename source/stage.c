@@ -269,6 +269,18 @@ void setIcon(char *path)
     SDL_SetWindowIcon(window, icon);
 }
 
+void getInfo()
+{
+    int windowW, windowH;
+    SDL_GetWindowSize(window, &windowW, &windowH);
+    SDL_Rect portRect;
+    SDL_RenderGetViewport(renderer, &portRect);
+    SDL_Rect clipRect;
+    SDL_RenderGetClipRect(renderer, &clipRect);
+    int scaleX, scaleY;
+    SDL_RenderGetScale(renderer, &scaleX, &scaleY);
+}
+
 // -------------------------------------------------------------------------------------------------------------------------------------------
 
 // main entrance
