@@ -143,6 +143,11 @@ void handleEvent(SDL_Event event)
 
 // -------------------------------------------------------------------------------------------------------------------------------------------
 
+uint32_t getTick()
+{
+    return SDL_GetTicks();
+}
+
 void setAuto(bool isAuto)
 {
     automatic = isAuto;
@@ -315,27 +320,29 @@ int main(int argc, char **argv)
     // SDL_Delay(500);
     //
 
-    // loop
-    int waitTime = 0;
+    // frame time
     windowFrameCount = get_max(windowFrameCount, 0);
     windowFrameCount = get_min(windowFrameCount, 60);
-    if (windowFrameCount > 0)
-    {
-        waitTime = 1000 / windowFrameCount;
-    }
+    uint32_t frameTime = windowFrameCount > 0 ? 1000 / windowFrameCount : 0;
+    // loop
     while (true)
     {
+        uint32_t startTime = SDL_GetTicks();
         SDL_Event event;
         bool isEvent = false;
-        if (waitTime == 0)
+        // wait event
+        if (frameTime == 0)
             isEvent = SDL_WaitEvent(&event);
         else
             isEvent = SDL_PollEvent(&event);
-        if (isEvent)
-        {
-            handleEvent(event);
-        }
-        SDL_Delay(waitTime);
+        // handle event
+        if (isEvent)  handleEvent(event);
+        // frame delay
+        uint32_t endTime = SDL_GetTicks();
+        int32_t costTime = endTime - startTime;
+        int32_t leftTime = frameTime - costTime;
+        SDL_Delay(get_max(leftTime, 0));
     }
+    // exit program
     exitMain();
 }
