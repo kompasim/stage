@@ -5,8 +5,29 @@
 api: stage is a SDL2 implementation for lua, u can use these apis below to draw something on the stage ...
 
 * window
+    show
+    hide
+    maximaze
+    minimaze
+    setTitle
+    getTitle
+    setPosition
+    getPosition
+    setSize
+    getSize
+    setFullscreen
+    showCursor
+    setCursor
+    setIcon
+    setOpacity
 
 * audio
+    initAudio
+    playMusic
+    playSound
+    pauseAudio
+    resumeAudio
+    endAudio
 
 * render
     setAuto : true, false auto render after drawing
@@ -62,6 +83,10 @@ function Stage_start()
     render.drawText(text2, 0, 0, 0, 0, 300, 325, 0, 0, font, 24, false, false, 0, 0.5, 0.5)
     --
     render.setColor(200, 250, 250, 200)
+    --
+    window.setIcon("app.png")
+    window.setCursor(11)
+    window.setTitle(string.format("Stage %s", os.date("%Y-%m-%d  %H-%M-%S", os.time())))
     --
 end
 

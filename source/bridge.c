@@ -87,6 +87,8 @@ static int luaTestFunc(lua_State* L)
     return 1;
 }
 
+//////////////////////////////////////////////////// render ////////////////////////////////////////////////////////////////
+
 static int luaSetAuto(lua_State* L)
 {
     bool m = lua_toboolean(L,1);
@@ -250,7 +252,6 @@ static int luaDrawLine(lua_State* L)
 
 static int luaDrawRect(lua_State* L)
 {
-
     double x = luaL_checknumber(L,1);
     double y = luaL_checknumber(L,2);
     double w = luaL_checknumber(L,3);
@@ -261,7 +262,6 @@ static int luaDrawRect(lua_State* L)
 
 static int luaFillRect(lua_State* L)
 {
-
     double x = luaL_checknumber(L,1);
     double y = luaL_checknumber(L,2);
     double w = luaL_checknumber(L,3);
@@ -269,6 +269,8 @@ static int luaFillRect(lua_State* L)
     fillRect(x, y, w, h);
     return 0;
 }
+
+//////////////////////////////////////////////////// audio ////////////////////////////////////////////////////////////////
 
 static int luaInitAudio(lua_State* L)
 {
@@ -310,6 +312,121 @@ static int luaEndAudio(lua_State* L)
     return 0;
 }
 
+//////////////////////////////////////////////////// window ////////////////////////////////////////////////////////////////
+
+
+static int luaShow(lua_State* L)
+{
+    show();
+    return 0;
+}
+
+static int luaHide(lua_State* L)
+{
+    hide();
+    return 0;
+}
+
+static int luaMaximaze(lua_State* L)
+{
+    maximaze();
+    return 0;
+}
+
+static int luaMinimaze(lua_State* L)
+{
+    minimaze();
+    return 0;
+}
+
+static int luaSetTitle(lua_State* L)
+{
+    const char *title = luaL_checkstring(L, 1);
+    setTitle(title);
+    return 0;
+}
+
+static int luaGetTitle(lua_State* L)
+{
+    const char *title = getTitle();
+    lua_pushstring(L, title);
+    return 1;
+}
+
+static int luaSetPosition(lua_State* L)
+{
+    double x = luaL_checknumber(L,1);
+    double y = luaL_checknumber(L,2);
+    setPosition(x, y);
+    return 0;
+}
+
+static int luaGetPosition(lua_State* L)
+{
+    int x, y;
+    getPosition(&x, &y);
+    lua_newtable(L);
+    Lua_registerTableNum(L, "x", x);
+    Lua_registerTableNum(L, "y", y);
+    return 1;
+}
+
+static int luaSetSize(lua_State* L)
+{
+    double w = luaL_checknumber(L,1);
+    double h = luaL_checknumber(L,2);
+    setSize(w, h);
+    return 0;
+}
+
+static int luaGetSize(lua_State* L)
+{
+    int w, h;
+    getSize(&w, &h);
+    lua_newtable(L);
+    Lua_registerTableNum(L, "w", w);
+    Lua_registerTableNum(L, "h", h);
+    return 1;
+}
+
+static int luaSetFullscreen(lua_State* L)
+{
+    bool isFullscreen = lua_toboolean(L, 1);
+    setFullscreen(isFullscreen);
+    return 0;
+}
+
+static int luaShowCursor(lua_State* L)
+{
+    bool isShow = lua_toboolean(L, 1);
+    showCursor(isShow);
+    return 0;
+}
+
+static int luaSetCursor(lua_State* L)
+{
+    int cursor = luaL_checkinteger(L, 1);
+    setCursor(cursor);
+    return 0;
+}
+
+static int luaSetIcon(lua_State* L)
+{
+    const char *path = luaL_checkstring(L, 1);
+    setIcon(path);
+    return 0;
+}
+
+static int luaSetOpacity(lua_State* L)
+{
+    double opacity = luaL_checknumber(L, 1);
+    setOpacity(opacity);
+    return 0;
+}
+
+
+//////////////////////////////////////////////////// register ////////////////////////////////////////////////////////////////
+
 void Bridge_register(Bridge *this)
 {
     //
@@ -345,6 +462,23 @@ void Bridge_register(Bridge *this)
     Bridge_registerTableFunc(this, "resumeAudio", luaResumeAudio);
     Bridge_registerTableFunc(this, "endAudio", luaEndAudio);
     lua_setglobal(this->L, "audio");
-
+    // window
+    lua_newtable(this->L);
+    Bridge_registerTableFunc(this, "show", luaShow);
+    Bridge_registerTableFunc(this, "hide", luaHide);
+    Bridge_registerTableFunc(this, "maximaze", luaMaximaze);
+    Bridge_registerTableFunc(this, "minimaze", luaMinimaze);
+    Bridge_registerTableFunc(this, "setTitle", luaSetTitle);
+    Bridge_registerTableFunc(this, "getTitle", luaGetTitle);
+    Bridge_registerTableFunc(this, "setPosition", luaSetPosition);
+    Bridge_registerTableFunc(this, "getPosition", luaGetPosition);
+    Bridge_registerTableFunc(this, "setSize", luaSetSize);
+    Bridge_registerTableFunc(this, "getSize", luaGetSize);
+    Bridge_registerTableFunc(this, "setFullscreen", luaSetFullscreen);
+    Bridge_registerTableFunc(this, "showCursor", luaShowCursor);
+    Bridge_registerTableFunc(this, "setCursor", luaSetCursor);
+    Bridge_registerTableFunc(this, "setIcon", luaSetIcon);
+    Bridge_registerTableFunc(this, "setOpacity", luaSetOpacity);
+    lua_setglobal(this->L, "window");
 
 }

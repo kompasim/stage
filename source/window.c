@@ -24,14 +24,14 @@ void minimaze()
     SDL_MinimizeWindow(window);
 }
 
-void setTitle(char *title)
+void setTitle(const char *title)
 {
     SDL_SetWindowTitle(window, title);
 }
 
-void getTitle()
+const char *getTitle()
 {
-    const char *title = SDL_GetWindowTitle(window);
+    return SDL_GetWindowTitle(window);
 }
 
 void setPosition(int x, int y)
@@ -39,10 +39,12 @@ void setPosition(int x, int y)
     SDL_SetWindowPosition(window, x, y);
 }
 
-void getPosition()
+void getPosition(int *x, int *y)
 {
-    int x, y;
-    SDL_GetWindowPosition(window, &x, &y);
+    int a, b;
+    SDL_GetWindowPosition(window, &a, &b);
+    *x = a;
+    *y = b;
 }
 
 void setSize(int w, int h)
@@ -50,10 +52,12 @@ void setSize(int w, int h)
     SDL_SetWindowSize(window, w, h);
 }
 
-void getSize()
+void getSize(int *w, int *h)
 {
-    int w, h;
-    SDL_GetWindowSize(window, &w, &h);
+    int a, b;
+    SDL_GetWindowSize(window, &a, &b);
+    *w = a;
+    *h = b;
 }
 
 void setFullscreen(bool isFullscreen)
@@ -71,7 +75,7 @@ void setCursor(int cursor)
     SDL_SetCursor(SDL_CreateSystemCursor(cursor));
 }
 
-void setIcon(char *path)
+void setIcon(const char *path)
 {
     SDL_Surface *icon = IMG_Load(path);
     SDL_SetWindowIcon(window, icon);
