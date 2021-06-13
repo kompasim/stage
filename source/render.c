@@ -95,10 +95,14 @@ void setColor( int r, int g, int b, int a)
     SDL_SetRenderDrawColor(renderer, r, g, b, a);
 }
 
-void getColor()
+void getColor(Uint8 *r, Uint8 *g, Uint8 *b, Uint8 *a)
 {
-    Uint8 r, g, b, a;
-    SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
+    Uint8 red, green, blue, alpha;
+    SDL_GetRenderDrawColor(renderer, &red, &green, &blue, &alpha);
+    *r = red;
+    *g = green;
+    *b = blue;
+    *a = alpha;
 }
 
 void setScale(float scaleX, float scaleY)
@@ -106,10 +110,12 @@ void setScale(float scaleX, float scaleY)
     SDL_RenderSetScale(renderer, scaleX, scaleY);
 }
 
-void getScale()
+void getScale(float *x, float *y)
 {
-    float x, y;
-    SDL_RenderGetScale(renderer, &x, &y);
+    float a, b;
+    SDL_RenderGetScale(renderer, &a, &b);
+    *x = a;
+    *y = b;
 }
 
 void setPort(int x, int y, int w, int h)

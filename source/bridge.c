@@ -33,6 +33,42 @@ void Bridge_release(Bridge *this)
     lua_close(this->L);
 }
 
+void Lua_registerTableFunc(lua_State *L, char *key, lua_CFunction value)
+{
+    lua_pushstring(L, key);
+    lua_pushcclosure(L, value, 0);
+    lua_settable(L, -3);
+}
+
+void Bridge_registerTableFunc(Bridge *this, char *key, lua_CFunction value)
+{
+    Lua_registerTableFunc(this->L, key, value);
+}
+
+void Lua_registerTableInt(lua_State *L, char *key, int value)
+{
+    lua_pushstring(L, key);
+    lua_pushinteger(L, value);
+    lua_settable(L, -3);
+}
+
+void Bridge_registerTableInt(Bridge *this, char *key, int value)
+{
+    Lua_registerTableInt(this->L, key, value);
+}
+
+void Lua_registerTableNum(lua_State *L, char *key, double value)
+{
+    lua_pushstring(L, key);
+    lua_pushnumber(L, value);
+    lua_settable(L, -3);
+}
+
+void Bridge_registerTableNum(Bridge *this, char *key, double value)
+{
+    Lua_registerTableNum(this->L, key, value);
+}
+
 static int luaTestFunc(lua_State* L)
 {
     double op1 = luaL_checknumber(L,1);
@@ -120,12 +156,34 @@ static int luaSetColor(lua_State* L)
     return 0;
 }
 
+static int luaGetColor(lua_State* L)
+{
+    Uint8 r, g, b, a;
+    getColor(&r, &g, &b, &a);
+    lua_newtable(L);
+    Lua_registerTableInt(L, "r", r);
+    Lua_registerTableInt(L, "g", g);
+    Lua_registerTableInt(L, "b", b);
+    Lua_registerTableInt(L, "a", a);
+    return 1;
+}
+
 static int luaSetScale(lua_State* L)
 {
     double x = luaL_checknumber(L,1);
     double y = luaL_checknumber(L,2);
     setScale(x, y);
     return 0;
+}
+
+static int luaGetScale(lua_State* L)
+{
+    float x, y;
+    getScale(&x, &y);
+    lua_newtable(L);
+    Lua_registerTableNum(L, "x", x);
+    Lua_registerTableNum(L, "y", y);
+    return 1;
 }
 
 static int luaSetPort(lua_State* L)
@@ -138,6 +196,12 @@ static int luaSetPort(lua_State* L)
     return 0;
 }
 
+static int luaGetPort(lua_State* L)
+{
+
+    return 0;
+}
+
 static int luaSetClip(lua_State* L)
 {
     double x = luaL_checknumber(L,1);
@@ -145,6 +209,12 @@ static int luaSetClip(lua_State* L)
     double w = luaL_checknumber(L,3);
     double h = luaL_checknumber(L,4);
     setClip(x, y, w, h);
+    return 0;
+}
+
+static int luaGetClip(lua_State* L)
+{
+
     return 0;
 }
 
@@ -189,13 +259,6 @@ static int luaFillRect(lua_State* L)
     return 0;
 }
 
-void Bridge_registerTableFunc(Bridge *this, char *key, lua_CFunction func)
-{
-    lua_pushstring(this->L, key);
-    lua_pushcclosure(this->L, func, 0);
-    lua_settable(this->L, -3);
-}
-
 void Bridge_register(Bridge *this)
 {
     //
@@ -210,9 +273,13 @@ void Bridge_register(Bridge *this)
     Bridge_registerTableFunc(this, "drawText", luaDrawText);
     Bridge_registerTableFunc(this, "doClear", luaDoClear);
     Bridge_registerTableFunc(this, "setColor", luaSetColor);
+    Bridge_registerTableFunc(this, "getColor", luaGetColor);
     Bridge_registerTableFunc(this, "setScale", luaSetScale);
+    Bridge_registerTableFunc(this, "getScale", luaGetScale);
     Bridge_registerTableFunc(this, "setPort", luaSetPort);
+    Bridge_registerTableFunc(this, "getPort", luaGetPort);
     Bridge_registerTableFunc(this, "setClip", luaSetClip);
+    Bridge_registerTableFunc(this, "getClip", luaGetClip);
     Bridge_registerTableFunc(this, "drawPoint", luaDrawPoint);
     Bridge_registerTableFunc(this, "drawLine", luaDrawLine);
     Bridge_registerTableFunc(this, "drawRect", luaDrawRect);
