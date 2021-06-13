@@ -29,7 +29,7 @@ bool Stage_running(Stage *this)
     return this->running;
 }
 
-void Stage_notify(Stage *this, const char *func)
+void Stage_callLua(Stage *this, const char *func)
 {
     char funcName[1024];
     sprintf(funcName, "Stage_%s", func);
@@ -40,12 +40,12 @@ void Stage_start(Stage *this)
 {
     this->running = true;
     testCode();
-    Stage_notify(this, "start");
+    Stage_callLua(this, "start");
 }
 
 void Stage_stop(Stage *this)
 {
-    Stage_notify(this, "stop");
+    Stage_callLua(this, "stop");
     this->running = false;
 }
 
@@ -58,81 +58,121 @@ void Stage_release(Stage *this)
 
 void Stage_before(Stage *this)
 {
-    Stage_notify(this, "before");
+    Stage_callLua(this, "before");
 }
 
 void Stage_handle(Stage *this ,SDL_Event event)
 {
     if (event.type == SDL_QUIT)
     {
-        Stage_stop(this);
+        Bridge_notifyNoArgs(bridge, "SDL_QUIT");
     }
-    else if (event.type == SDL_SYSWMEVENT) // System specific event
+    else if (event.type == SDL_WINDOWEVENT)
     {
-        printf("\nSDL_SYSWMEVENT");
-    }
-    else if (event.type == SDL_WINDOWEVENT) // Window state change
-    {
-        // printf("\nSDL_WINDOWEVENT");
-    }
-    else if (event.type == SDL_DISPLAYEVENT) //  Display state change
-    {
-        printf("\nSDL_DISPLAYEVENT");
-    }
-    else if (event.type == SDL_DROPFILE) // The system requests a file open
-    {
-        // printf("\nSDL_DROPFILE");
-    }
-    else if (event.type == SDL_CLIPBOARDUPDATE) // The clipboard changed
-    {
-        // printf("\nSDL_CLIPBOARDUPDATE");
-    }
-    else if (event.type == SDL_KEYDOWN) // Key pressed
-    {
-        if (event.key.keysym.sym == SDLK_F1)
+        char *tp = "SDL_WINDOWEVENT_NONE";
+        switch (event.window.event)
         {
-            // do_message("f1 down"); // SDL_KeyCode
-            testF1();
-        }
+        case SDL_WINDOWEVENT_SHOWN:
+            tp = "SDL_WINDOWEVENT_SHOWN";
+            break;
+        case SDL_WINDOWEVENT_HIDDEN:
+            tp = "SDL_WINDOWEVENT_HIDDEN";
+            break;
+        case SDL_WINDOWEVENT_EXPOSED:
+            tp = "SDL_WINDOWEVENT_EXPOSED";
+            break;
+        case SDL_WINDOWEVENT_MOVED:
+            tp = "SDL_WINDOWEVENT_MOVED";
+            break;
+        case SDL_WINDOWEVENT_RESIZED:
+            tp = "SDL_WINDOWEVENT_RESIZED";
+            break;
+        case SDL_WINDOWEVENT_SIZE_CHANGED:
+            tp = "SDL_WINDOWEVENT_SIZE_CHANGED";
+            break;
+        case SDL_WINDOWEVENT_MINIMIZED:
+            tp = "SDL_WINDOWEVENT_MINIMIZED";
+            break;
+        case SDL_WINDOWEVENT_MAXIMIZED:
+            tp = "SDL_WINDOWEVENT_MAXIMIZED";
+            break;
+        case SDL_WINDOWEVENT_RESTORED:
+            tp = "SDL_WINDOWEVENT_RESTORED";
+            break;
+        case SDL_WINDOWEVENT_ENTER:
+            tp = "SDL_WINDOWEVENT_ENTER";
+            break;
+        case SDL_WINDOWEVENT_LEAVE:
+            tp = "SDL_WINDOWEVENT_LEAVE";
+            break;
+        case SDL_WINDOWEVENT_FOCUS_GAINED:
+            tp = "SDL_WINDOWEVENT_FOCUS_GAINED";
+            break;
+        case SDL_WINDOWEVENT_FOCUS_LOST:
+            tp = "SDL_WINDOWEVENT_FOCUS_LOST";
+            break;
+        case SDL_WINDOWEVENT_CLOSE:
+            tp = "SDL_WINDOWEVENT_CLOSE";
+            break;
+        case SDL_WINDOWEVENT_TAKE_FOCUS:
+            tp = "SDL_WINDOWEVENT_TAKE_FOCUS";
+            break;
+        case SDL_WINDOWEVENT_HIT_TEST:
+            tp = "SDL_WINDOWEVENT_HIT_TEST";
+            break;
+        default:
+            break;
+        };
+        Bridge_notifyWithString(bridge, "SDL_WINDOWEVENT", tp);
     }
-    else if (event.type == SDL_KEYUP) // Key released
+    else if (event.type == SDL_CLIPBOARDUPDATE)
     {
-        if (event.key.keysym.sym == SDLK_F2)
-        {
-            // do_message("f1 up"); // SDL_KeyCode
-            testF2();
-        }
+        Bridge_notifyNoArgs(bridge, "SDL_CLIPBOARDUPDATE");
     }
-    else if (event.type == SDL_MOUSEBUTTONDOWN) // Mouse button pressed
+    else if (event.type == SDL_DROPFILE)
     {
-        // printf("\nSDL_MOUSEBUTTONDOWN: key:[%d]", event.button.button); // left 1, middle 2, right 3
+        Bridge_notifyWithString(bridge, "SDL_DROPFILE", event.drop.file);
     }
-    else if (event.type == SDL_MOUSEBUTTONUP) // Mouse button released
+    else if (event.type == SDL_KEYDOWN)
     {
-        // printf("\nSDL_MOUSEBUTTONUP: key:[%d]", event.button.button); // left 1, middle 2, right 3
+        const char *key = SDL_GetKeyName(event.key.keysym.sym);
+        Bridge_notifyWithString(bridge, "SDL_KEYDOWN", key);
     }
-    else if (event.type == SDL_MOUSEMOTION) // Mouse moved
+    else if (event.type == SDL_KEYUP)
     {
-        // printf("\nSDL_MOUSEMOTION: x:[%d] y:[%d]", event.button.x, event.button.y);
+        const char *key = SDL_GetKeyName(event.key.keysym.sym);
+        Bridge_notifyWithString(bridge, "SDL_KEYUP", key);
     }
-    else if (event.type == SDL_MOUSEWHEEL) // Mouse wheel motion
+    else if (event.type == SDL_MOUSEBUTTONDOWN)
     {
-        // printf("\nSDL_MOUSEWHEEL: wheel:[%d]", event.wheel.y); // forward 1, backward -1
+        Bridge_notifyWithInt(bridge, "SDL_MOUSEBUTTONDOWN", event.button.button);
     }
-    Stage_notify(this, "handle");
+    else if (event.type == SDL_MOUSEBUTTONUP)
+    {
+        Bridge_notifyWithInt(bridge, "SDL_MOUSEBUTTONUP", event.button.button);
+    }
+    else if (event.type == SDL_MOUSEMOTION)
+    {
+        SDL_Point point = {event.button.x, event.button.y};
+        Bridge_notifyWithPoint(bridge, "SDL_MOUSEMOTION", point);
+    }
+    else if (event.type == SDL_MOUSEWHEEL)
+    {
+        Bridge_notifyWithInt(bridge, "SDL_MOUSEWHEEL", event.wheel.y);
+    }
 }
 
 void Stage_update(Stage *this)
 {
-    Stage_notify(this, "update");
+    Stage_callLua(this, "update");
 }
 
 void Stage_render(Stage *this)
 {
-    Stage_notify(this, "render");
+    Stage_callLua(this, "render");
 }
 
 void Stage_after(Stage *this)
 {
-    Stage_notify(this, "after");
+    Stage_callLua(this, "after");
 }

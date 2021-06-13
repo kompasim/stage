@@ -52,6 +52,10 @@ Bridge *bridge = NULL;
 #ifndef HEAD_FUNCTIONS
 
 void Bridge_call(Bridge *, char *);
+void Bridge_notifyNoArgs(Bridge *, const char *);
+void Bridge_notifyWithInt(Bridge *, const char *, int);
+void Bridge_notifyWithString(Bridge *, const char *, const char *);
+void Bridge_notifyWithPoint(Bridge *, const char *, SDL_Point);
 
 #define HEAD_FUNCTIONS
 #endif

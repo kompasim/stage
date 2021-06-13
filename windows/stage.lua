@@ -106,8 +106,33 @@ function Stage_before()
     -- print('lua Stage_before ...')
 end
 
-function Stage_handle()
+function Stage_handle(name, value)
     -- print('lua Stage_handle ...')
+    if name == "SDL_QUIT" then
+        -- stage.doExit()
+    elseif name == "SDL_WINDOWEVENT" then
+        -- window event, value is event type
+        print("WINDOW:", value)
+    elseif name == "SDL_CLIPBOARDUPDATE" then
+        -- clipboard update
+    elseif name == "SDL_DROPFILE" then
+        -- drop file, value is file name
+    elseif name == "SDL_KEYDOWN" then
+        -- keyboard down, key: F1
+    elseif name == "SDL_KEYUP" then
+        -- keyboard up
+    elseif name == "SDL_MOUSEBUTTONDOWN" then
+        -- mouse down, button : 1
+    elseif name == "SDL_MOUSEBUTTONUP" then
+        -- mouse up
+    elseif name == "SDL_MOUSEMOTION" then
+        -- mouse move, position: value.x, value.y
+    elseif name == "SDL_MOUSEWHEEL" then
+        -- mouse wheel, direction: forward 1, backward -1
+    end
+
+    
+    -- print("-->event:", name, value)
 end
 
 local x = 0;

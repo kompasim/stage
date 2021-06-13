@@ -74,6 +74,48 @@ void Lua_registerRectTable(lua_State *L, SDL_Rect rect)
     Lua_registerTableNum(L, "h", rect.h);
 }
 
+
+//////////////////////////////////////////////////// event ////////////////////////////////////////////////////////////////
+
+void Bridge_notifyNoArgs(Bridge *this, const char *eventName)
+{
+    const char *funcName = "Stage_handle";
+    lua_getglobal(this->L, funcName);
+    lua_pushstring(this->L, eventName);
+    lua_pcall(this->L, 1, 0, 0);
+}
+
+void Bridge_notifyWithInt(Bridge *this, const char *eventName, int value)
+{
+    const char *funcName = "Stage_handle";
+    lua_getglobal(this->L, funcName);
+    lua_pushstring(this->L, eventName);
+    lua_pushinteger(this->L, value);
+    lua_pcall(this->L, 2, 0, 0);
+}
+
+void Bridge_notifyWithString(Bridge *this, const char *eventName, const char *value)
+{
+    const char *funcName = "Stage_handle";
+    lua_getglobal(this->L, funcName);
+    lua_pushstring(this->L, eventName);
+    lua_pushstring(this->L, value);
+    lua_pcall(this->L, 2, 0, 0);
+}
+
+void Bridge_notifyWithPoint(Bridge *this, const char *eventName, SDL_Point point)
+{
+    const char *funcName = "Stage_handle";
+    lua_getglobal(this->L, funcName);
+    lua_pushstring(this->L, eventName);
+    lua_newtable(this->L);
+    Bridge_registerTableInt(this, "x", point.x);
+    Bridge_registerTableInt(this, "y", point.y);
+    lua_pcall(this->L, 2, 0, 0);
+}
+
+//////////////////////////////////////////////////// test ////////////////////////////////////////////////////////////////
+
 static int luaTestFunc(lua_State* L)
 {
     double op1 = luaL_checknumber(L,1);
