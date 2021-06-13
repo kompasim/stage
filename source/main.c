@@ -22,7 +22,7 @@ bool windowIsHidden = false;
 bool windowOnTop = false;
 bool windowSkipTask = false;
 char *windowSizeState = "EMPTY";
-char *mainScriptFile = "stage.lua";
+char *luaScriptFile = "stage.lua";
 int framesPerSecond = 0;
 
 uint32_t frameTime = 0;
@@ -54,8 +54,8 @@ void parseLine(char *left, char *right)
         automatic = is_similar(right, "TRUE");
     else if (is_similar(left, "WINDOW_SIZE_STATE"))
         windowSizeState = right;
-    else if (is_similar(left, "MAIN_SCRIPT_FILE"))
-        mainScriptFile = right;
+    else if (is_similar(left, "LUA_SCRIPT_FILE"))
+        luaScriptFile = right;
     else if (is_similar(left, "FRAMES_PER_SECOND"))
         framesPerSecond = atoi(right);
     else
@@ -115,10 +115,15 @@ int main(int argc, char **argv)
     parseArgs();
     // new
     Stage *stage = Stage_new();
+    Bridge *bridge = Bridge_new();
     // create
     Stage_create(stage, windowTitle, windowWidth, windowHeight, flag);
     window = stage->window;
     renderer = stage->renderer;
+    Bridge_create(bridge);
+    // init lua
+    Bridge_register(bridge);
+    Bridge_run(bridge, luaScriptFile);
     // start
     Stage_start(stage);
     // loop
@@ -155,5 +160,6 @@ int main(int argc, char **argv)
     }
     // exit program
     Stage_release(stage);
+    Bridge_release(bridge);
     exit(EXIT_SUCCESS);
 }

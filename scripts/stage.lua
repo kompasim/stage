@@ -1,4 +1,2 @@
 -- 
-function func(a, b)
-    return "func in lua"
-end
+print("stage lua file ...")

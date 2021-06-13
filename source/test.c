@@ -2,7 +2,6 @@
 
 #include "head.h"
 
-extern char *mainScriptFile;
 
 void testCode()
 {
