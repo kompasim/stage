@@ -11,9 +11,6 @@ WINDOW_IS_HIDDEN = FALSE
 WINDOW_ON_TOP = FALSE
 WINDOW_SKIP_TASK = FALSE
 
-# frame count: 1 ~ 60
-WINDOW_FRAME_COUNT = 0
-
 # auto render
 IS_AUTO_RENDER = TRUE
 
@@ -22,3 +19,6 @@ WINDOW_SIZE_STATE = NONE
 
 # main script
 MAIN_SCRIPT_FILE = stage.lua
+
+# frame range: 1 ~ 60
+FRAMES_PER_SECOND = 5

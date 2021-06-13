@@ -29,6 +29,7 @@ void Stage_create(Stage *this, char *title, int width, int height, int flag)
     this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
     this->running = false;
 }
+
 bool Stage_running(Stage *this)
 {
     return this->running;
@@ -59,14 +60,8 @@ void Stage_before(Stage *this)
     // TODO: notify lua
 }
 
-void Stage_handle(Stage *this, bool isWait)
+void Stage_handle(Stage *this ,SDL_Event event)
 {
-    // check event
-    SDL_Event event;
-    bool isEvent = false;
-    isEvent = isWait ? SDL_WaitEvent(&event) : SDL_PollEvent(&event);
-    if (!isEvent) return;
-    // 
     if (event.type == SDL_QUIT)
     {
         Stage_stop(this);
@@ -134,6 +129,7 @@ void Stage_update(Stage *this)
 void Stage_render(Stage *this)
 {
     // TODO: notify lua
+    printf("[%d]\n", getTick());
 }
 
 void Stage_after(Stage *this)

@@ -16,7 +16,6 @@ const char *CONFIG_NAME = "config.txt";
 char *windowTitle = "Stage";
 int windowWidth = 480;
 int windowHeight = 480;
-int windowFrameCount = 0;
 bool windowCanResize = false;
 bool windowNoBorder = false;
 bool windowIsHidden = false;
@@ -24,6 +23,7 @@ bool windowOnTop = false;
 bool windowSkipTask = false;
 char *windowSizeState = "EMPTY";
 char *mainScriptFile = "stage.lua";
+int framesPerSecond = 0;
 
 uint32_t frameTime = 0;
 Uint32 flag = 0;
@@ -40,8 +40,6 @@ void parseLine(char *left, char *right)
         windowWidth = atoi(right);
     else if (is_similar(left, "WINDOW_HEIGHT"))
         windowHeight = atoi(right);
-    else if (is_similar(left, "WINDOW_FRAME_COUNT"))
-        windowFrameCount = atoi(right);
     else if (is_similar(left, "WINDOW_CAN_RESIZE"))
         windowCanResize = is_similar(right, "TRUE");
     else if (is_similar(left, "WINDOW_NO_BORDER"))
@@ -58,6 +56,8 @@ void parseLine(char *left, char *right)
         windowSizeState = right;
     else if (is_similar(left, "MAIN_SCRIPT_FILE"))
         mainScriptFile = right;
+    else if (is_similar(left, "FRAMES_PER_SECOND"))
+        framesPerSecond = atoi(right);
     else
         return;
 }
@@ -102,9 +102,8 @@ void parseArgs()
     else if (is_similar(windowSizeState, "MIN"))
         flag = flag | SDL_WINDOW_MINIMIZED;
     // frame
-    windowFrameCount = get_max(windowFrameCount, 0);
-    windowFrameCount = get_min(windowFrameCount, 60);
-    frameTime = windowFrameCount > 0 ? 1000 / windowFrameCount : 0;
+    framesPerSecond = get_min(get_max(framesPerSecond, 0), 60);
+    frameTime = framesPerSecond > 0 ? 1000 / framesPerSecond : 0;
 }
 
 // main entrance
@@ -115,36 +114,44 @@ int main(int argc, char **argv)
     // args
     parseArgs();
     // new
-    Stage *stage = Stage_new(windowTitle, windowWidth, windowHeight, flag);
+    Stage *stage = Stage_new();
     // create
     Stage_create(stage, windowTitle, windowWidth, windowHeight, flag);
     window = stage->window;
     renderer = stage->renderer;
     // start
     Stage_start(stage);
-    // type
-    bool isWait = frameTime == 0;
     // loop
     while (Stage_running(stage))
     {
-        // frage start
-        Stage_before(stage);
-        // record time
-        uint32_t startTime = SDL_GetTicks();
-        // handle event
-        Stage_handle(stage, isWait);
-        // update state
-        Stage_update(stage);
-        // render objects
-        Stage_render(stage);
-        // frame delay
-        uint32_t endTime = SDL_GetTicks();
-        int32_t costTime = endTime - startTime;
-        int32_t leftTime = frameTime - costTime;
-        int32_t delayTime = get_max(leftTime, 0);
-        SDL_Delay(delayTime);
-        // frame end
-        Stage_after(stage);
+        if(framesPerSecond == 0)
+        {
+            // handle event
+            SDL_Event event;
+            if (SDL_WaitEvent(&event)) Stage_handle(stage, event);
+            //
+        } else {
+            // frage start
+            Stage_before(stage);
+            // record time
+            uint32_t startTime = SDL_GetTicks();
+            // handle event
+            SDL_Event event;
+            if (SDL_PollEvent(&event)) Stage_handle(stage, event);
+            // update state
+            Stage_update(stage);
+            // render objects
+            Stage_render(stage);
+            // frame delay
+            uint32_t endTime = SDL_GetTicks();
+            int32_t costTime = endTime - startTime;
+            int32_t leftTime = frameTime - costTime;
+            int32_t delayTime = get_max(leftTime, 0);
+            SDL_Delay(delayTime);
+            // frame end
+            Stage_after(stage);
+            //
+        }
     }
     // exit program
     Stage_release(stage);
