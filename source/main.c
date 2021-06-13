@@ -116,15 +116,20 @@ int main(int argc, char **argv)
     parseArgs();
     // new
     Stage *stage = Stage_new(windowTitle, windowWidth, windowHeight, flag);
+    // create
+    Stage_create(stage, windowTitle, windowWidth, windowHeight, flag);
     window = stage->window;
     renderer = stage->renderer;
-    // create
-    Stage_create(stage);
+    // start
+    Stage_start(stage);
     // type
     bool isWait = frameTime == 0;
     // loop
     while (Stage_running(stage))
     {
+        // frage start
+        Stage_before(stage);
+        // record time
         uint32_t startTime = SDL_GetTicks();
         // handle event
         Stage_handle(stage, isWait);
@@ -136,7 +141,10 @@ int main(int argc, char **argv)
         uint32_t endTime = SDL_GetTicks();
         int32_t costTime = endTime - startTime;
         int32_t leftTime = frameTime - costTime;
-        SDL_Delay(get_max(leftTime, 0));
+        int32_t delayTime = get_max(leftTime, 0);
+        SDL_Delay(delayTime);
+        // frame end
+        Stage_after(stage);
     }
     // exit program
     Stage_release(stage);

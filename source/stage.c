@@ -8,11 +8,16 @@ typedef struct {
     bool running;
 } Stage;
 
-Stage *Stage_new(char *title, int width, int height, int flag)
+Stage *Stage_new()
+{
+    return malloc(sizeof(Stage));
+}
+
+
+void Stage_create(Stage *this, char *title, int width, int height, int flag)
 {
     do_assert(TTF_Init() == 0, "ttf init failed!");
     do_assert(SDL_Init(SDL_INIT_EVERYTHING) == 0, "sdl init failed!");
-    Stage *this = malloc(sizeof(Stage));
     this->window = SDL_CreateWindow(
         title,
         SDL_WINDOWPOS_CENTERED,
@@ -22,23 +27,23 @@ Stage *Stage_new(char *title, int width, int height, int flag)
         flag
     );
     this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
-    return this;
+    this->running = false;
 }
-
-
-void Stage_create(Stage *this)
-{
-    this->running = true;
-    testCode();
-}
-
 bool Stage_running(Stage *this)
 {
     return this->running;
 }
 
+void Stage_start(Stage *this)
+{
+    this->running = true;
+    // TODO: notify lua
+    testCode();
+}
+
 void Stage_stop(Stage *this)
 {
+    // TODO: notify lua
     this->running = false;
 }
 
@@ -47,6 +52,11 @@ void Stage_release(Stage *this)
     SDL_DestroyRenderer(this->renderer);
     SDL_DestroyWindow(this->window);
     SDL_Quit();
+}
+
+void Stage_before(Stage *this)
+{
+    // TODO: notify lua
 }
 
 void Stage_handle(Stage *this, bool isWait)
@@ -113,14 +123,20 @@ void Stage_handle(Stage *this, bool isWait)
     {
         // printf("\nSDL_MOUSEWHEEL: wheel:[%d]", event.wheel.y); // forward 1, backward -1
     }
+    // TODO: notify lua
 }
 
 void Stage_update(Stage *this)
 {
-    //
+    // TODO: notify lua
 }
 
 void Stage_render(Stage *this)
 {
-    //
+    // TODO: notify lua
+}
+
+void Stage_after(Stage *this)
+{
+    // TODO: notify lua
 }
