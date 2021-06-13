@@ -2,13 +2,6 @@
 
 #include "head.h"
 
-typedef struct {
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-    Bridge *bridge;
-    bool running;
-} Stage;
-
 Stage *Stage_new()
 {
     return malloc(sizeof(Stage));
@@ -40,12 +33,11 @@ void Stage_notify(Stage *this, const char *func)
 {
     char funcName[1024];
     sprintf(funcName, "Stage_%s", func);
-    Bridge_call(this->bridge, funcName);
+    Bridge_call(bridge, funcName);
 }
 
-void Stage_start(Stage *this, Bridge *bridge)
+void Stage_start(Stage *this)
 {
-    this->bridge = bridge;
     this->running = true;
     testCode();
     Stage_notify(this, "start");

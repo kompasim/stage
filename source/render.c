@@ -2,9 +2,6 @@
 
 #include "head.h"
 
-extern SDL_Renderer *renderer;
-extern bool automatic;
-
 void setAuto(bool isAuto)
 {
     automatic = isAuto;

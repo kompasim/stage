@@ -5,9 +5,9 @@
 #include "window.c"
 #include "render.c"
 #include "others.c"
-#include "bridge.c"
 #include "test.c"
 #include "stage.c"
+#include "bridge.c"
 
 // config
 const char *CONFIG_NAME = "config.txt";
@@ -27,9 +27,6 @@ int framesPerSecond = 0;
 
 uint32_t frameTime = 0;
 Uint32 flag = 0;
-SDL_Window *window = NULL;
-SDL_Renderer *renderer = NULL;
-bool automatic = false;
 
 // parse line
 void parseLine(char *left, char *right)
@@ -114,8 +111,8 @@ int main(int argc, char **argv)
     // args
     parseArgs();
     // new
-    Stage *stage = Stage_new();
-    Bridge *bridge = Bridge_new();
+    stage = Stage_new();
+    bridge = Bridge_new();
     // create
     Stage_create(stage, windowTitle, windowWidth, windowHeight, flag);
     window = stage->window;
@@ -125,7 +122,7 @@ int main(int argc, char **argv)
     Bridge_register(bridge);
     Bridge_run(bridge, luaScriptFile);
     // start
-    Stage_start(stage, bridge);
+    Stage_start(stage);
     // loop
     while (Stage_running(stage))
     {

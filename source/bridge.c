@@ -2,10 +2,6 @@
 
 #include "head.h"
 
-typedef struct {
-    lua_State* L;
-} Bridge;
-
 Bridge *Bridge_new()
 {
     return malloc(sizeof(Bridge));
@@ -424,6 +420,48 @@ static int luaSetOpacity(lua_State* L)
     return 0;
 }
 
+//////////////////////////////////////////////////// stage ////////////////////////////////////////////////////////////////
+
+static int luaDoExit(lua_State* L)
+{
+    Stage_stop(stage);
+    return 0;
+}
+
+static int luaGetVersion(lua_State* L)
+{
+    const char *text = getVersion();
+    lua_pushstring(L, text);
+    return 1;
+}
+
+static int luaDoDelay(lua_State* L)
+{
+    double time = luaL_checknumber(L,1);
+    doDelay(time);
+    return 0;
+}
+
+static int luaGetTick(lua_State* L)
+{
+    uint32_t tick = getTick();
+    lua_pushnumber(L, tick);
+    return 1;
+}
+
+static int luaSetClipboard(lua_State* L)
+{
+    const char *text = luaL_checkstring(L, 1);
+    setClipboard(text);
+    return 0;
+}
+
+static int luaGetClipboard(lua_State* L)
+{
+    const char *text = getClipboard();
+    lua_pushstring(L, text);
+    return 1;
+}
 
 //////////////////////////////////////////////////// register ////////////////////////////////////////////////////////////////
 
@@ -480,5 +518,14 @@ void Bridge_register(Bridge *this)
     Bridge_registerTableFunc(this, "setIcon", luaSetIcon);
     Bridge_registerTableFunc(this, "setOpacity", luaSetOpacity);
     lua_setglobal(this->L, "window");
+    // stage
+    lua_newtable(this->L);
+    Bridge_registerTableFunc(this, "getVersion", luaGetVersion);
+    Bridge_registerTableFunc(this, "doExit", luaDoExit);
+    Bridge_registerTableFunc(this, "doDelay", luaDoDelay);
+    Bridge_registerTableFunc(this, "getTick", luaGetTick);
+    Bridge_registerTableFunc(this, "setClipboard", luaSetClipboard);
+    Bridge_registerTableFunc(this, "getClipboard", luaGetClipboard);
+    lua_setglobal(this->L, "stage");
 
 }

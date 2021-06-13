@@ -2,59 +2,67 @@
 
 --[[
 
-api: stage is a SDL2 implementation for lua, u can use these apis below to draw something on the stage ...
+-- api: stage is a SDL2 implementation for lua, u can use these apis below to draw something on the stage ...
 
-* window
-    show
-    hide
-    maximaze
-    minimaze
-    setTitle
-    getTitle
-    setPosition
-    getPosition
-    setSize
-    getSize
-    setFullscreen
-    showCursor
-    setCursor
-    setIcon
-    setOpacity
+-- stage
+    -- getVersion
+    -- doExit
+    -- doDelay
+    -- getTick
+    -- setClipboard
+    -- getClipboard
 
-* audio
-    initAudio
-    playMusic
-    playSound
-    pauseAudio
-    resumeAudio
-    endAudio
+--  window
+    -- show
+    -- hide
+    -- maximaze
+    -- minimaze
+    -- setTitle
+    -- getTitle
+    -- setPosition
+    -- getPosition
+    -- setSize
+    -- getSize
+    -- setFullscreen
+    -- showCursor
+    -- setCursor
+    -- setIcon
+    -- setOpacity
 
-* render
-    setAuto : true, false auto render after drawing
-    setBlend : 0 no blending, 1 alpha blending, 2 additive blending, 4 color modulate, 8 color multiply
-    doRender : render manually after set auto false
-    doClear : clear stage with current color
-    setColor
-    getColor
-    setScale
-    getScale
-    setPort
-    getPort
-    setClip
-    getClip
-    drawPoint
-    drawLine
-    drawRect
-    fillRect
-    drawImage
-    drawText
+-- audio
+    -- initAudio
+    -- playMusic
+    -- playSound
+    -- pauseAudio
+    -- resumeAudio
+    -- endAudio
+
+-- render
+    -- setAuto : true, false auto render after drawing
+    -- setBlend : 0 no blending, 1 alpha blending, 2 additive blending, 4 color modulate, 8 color multiply
+    -- doRender : render manually after set auto false
+    -- doClear : clear stage with current color
+    -- setColor
+    -- getColor
+    -- setScale
+    -- getScale
+    -- setPort
+    -- getPort
+    -- setClip
+    -- getClip
+    -- drawPoint
+    -- drawLine
+    -- drawRect
+    -- fillRect
+    -- drawImage
+    -- drawText
 
 ]]
 
 print("lua Stage file ...")
 
 function Stage_start()
-    print('lua Stage_start  ...')
+    -- print('lua Stage_start  ...')
     --
     audio.initAudio()
     audio.playMusic('./road.wav', 100)
@@ -91,7 +99,7 @@ function Stage_start()
 end
 
 function Stage_stop()
-    print('lua Stage_stop ...')
+    -- print('lua Stage_stop ...')
 end
 
 function Stage_before()
@@ -106,6 +114,7 @@ local x = 0;
 local y = 200
 
 function Stage_update()
+    -- print('lua Stage_update ...')
     if x > 150 then
         render.setColor(100, 10, 10, 200)
         y = 100
@@ -114,6 +123,7 @@ function Stage_update()
 end
 
 function Stage_render()
+    -- print('lua Stage_render ...')
     render.drawLine(x, y, 0, 0);
     render.drawPoint(x, y + 10);
     render.drawRect(x, y + 20, 20, 20);

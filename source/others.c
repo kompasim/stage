@@ -2,14 +2,9 @@
 
 #include "head.h"
 
-void setClipboard(char *txt)
+const char *getVersion()
 {
-    SDL_SetClipboardText(txt);
-}
-
-void getClipboard()
-{
-    char *txt = SDL_GetClipboardText();
+    return "0.0.1";
 }
 
 void doDelay(int time)
@@ -20,5 +15,15 @@ void doDelay(int time)
 uint32_t getTick()
 {
     return SDL_GetTicks();
+}
+
+void setClipboard(const char *txt)
+{
+    SDL_SetClipboardText(txt);
+}
+
+char *getClipboard()
+{
+    return SDL_GetClipboardText();
 }
 

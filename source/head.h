@@ -25,3 +25,33 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+
+// variables
+#ifndef HEAD_VARIABLES
+
+SDL_Window *window = NULL;
+SDL_Renderer *renderer = NULL;
+bool automatic = false;
+
+typedef struct {
+    SDL_Window *window;
+    SDL_Renderer *renderer;
+    bool running;
+} Stage;
+typedef struct {
+    lua_State* L;
+} Bridge;
+
+Stage *stage = NULL;
+Bridge *bridge = NULL;
+
+#define HEAD_VARIABLES
+#endif
+
+// functions
+#ifndef HEAD_FUNCTIONS
+
+void Bridge_call(Bridge *, char *);
+
+#define HEAD_FUNCTIONS
+#endif
