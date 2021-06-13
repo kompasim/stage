@@ -66,7 +66,7 @@ void drawText(char *text, int x, int y, int w, int h, int toX, int toY, int toW,
     font = strlen(font) > 0 ? font : "ukij.ttf";
     size = get_min(get_max(size, 1), 100);
     TTF_Font *ttf = TTF_OpenFont(font, size);
-    assert(ttf != NULL, "ttf open failed!");
+    do_assert(ttf != NULL, "ttf open failed!");
     Uint8 r, g, b, a;
     SDL_GetRenderDrawColor(renderer, &r, &g, &b, &a);
     SDL_Color color = {r, g, b, a};
@@ -166,8 +166,10 @@ void fillRect(int x, int y, int w, int h)
 
 void renderTest()
 {
+    printf("RENDER_TEST:\n");
     setColor(50, 50, 50, 255);
     doClear();
+    doRender();
     //
     drawImage("./lua.png", 0, 0, 0, 0, 100, 350, 0, 0, false, false, 0, 0.5, 0.5);
     //

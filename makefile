@@ -1,7 +1,7 @@
 
 # names
 DST_NAME = stage.exe
-SRC = ./source/stage.c
+SRC = ./source/main.c
 DST = ./windows/$(DST_NAME)
 
 # SDL lib location

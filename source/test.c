@@ -6,11 +6,11 @@ extern char *mainScriptFile;
 
 void testCode()
 {
+    printf("TEST:\n");
     setIcon("app.png");
     setCursor(11);
     renderTest();
-    // 
-
+    //
 }
 
 void testF1()

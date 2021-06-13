@@ -8,10 +8,6 @@
     // TODO
 #endif
 
-// macro
-// #define max(a,b) (((a) > (b)) ? (a) : (b))
-// #define min(a,b) (((a) < (b)) ? (a) : (b))
-
 int get_max(int a, int b)
 {
 	return (a > b ? a : b);
@@ -22,7 +18,7 @@ int get_min(int a, int b)
 	return (a < b ? a : b);
 }
 
-void message(char * msg)
+void do_message(char * msg)
 {
     char txt[1024];
     sprintf(txt, "MSG:%s", msg);
@@ -33,7 +29,7 @@ void message(char * msg)
     #endif
 }
 
-void error(const char *msg)
+void do_error(const char *msg)
 {
     char txt[1024];
     sprintf(txt, "ERR:%s", msg);
@@ -45,10 +41,10 @@ void error(const char *msg)
     exit(EXIT_FAILURE);
 }
 
-void assert(bool value, char *txt)
+void do_assert(bool value, char *txt)
 {
     if(value) return;
-    error(txt);
+    do_error(txt);
 }
 
 inline bool is_empty(char ch)
