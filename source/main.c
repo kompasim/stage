@@ -125,7 +125,7 @@ int main(int argc, char **argv)
     Bridge_register(bridge);
     Bridge_run(bridge, luaScriptFile);
     // start
-    Stage_start(stage);
+    Stage_start(stage, bridge);
     // loop
     while (Stage_running(stage))
     {

@@ -5,6 +5,7 @@
 typedef struct {
     SDL_Window *window;
     SDL_Renderer *renderer;
+    Bridge *bridge;
     bool running;
 } Stage;
 
@@ -35,16 +36,24 @@ bool Stage_running(Stage *this)
     return this->running;
 }
 
-void Stage_start(Stage *this)
+void Stage_notify(Stage *this, const char *func)
 {
+    char funcName[1024];
+    sprintf(funcName, "Stage_%s", func);
+    Bridge_call(this->bridge, funcName);
+}
+
+void Stage_start(Stage *this, Bridge *bridge)
+{
+    this->bridge = bridge;
     this->running = true;
-    // TODO: notify lua
+    Stage_notify(this, "start");
     testCode();
 }
 
 void Stage_stop(Stage *this)
 {
-    // TODO: notify lua
+    Stage_notify(this, "stop");
     this->running = false;
 }
 
@@ -57,7 +66,7 @@ void Stage_release(Stage *this)
 
 void Stage_before(Stage *this)
 {
-    // TODO: notify lua
+    Stage_notify(this, "before");
 }
 
 void Stage_handle(Stage *this ,SDL_Event event)
@@ -118,21 +127,20 @@ void Stage_handle(Stage *this ,SDL_Event event)
     {
         // printf("\nSDL_MOUSEWHEEL: wheel:[%d]", event.wheel.y); // forward 1, backward -1
     }
-    // TODO: notify lua
+    Stage_notify(this, "handle");
 }
 
 void Stage_update(Stage *this)
 {
-    // TODO: notify lua
+    Stage_notify(this, "update");
 }
 
 void Stage_render(Stage *this)
 {
-    // TODO: notify lua
-    printf("[%d]\n", getTick());
+    Stage_notify(this, "render");
 }
 
 void Stage_after(Stage *this)
 {
-    // TODO: notify lua
+    Stage_notify(this, "after");
 }
