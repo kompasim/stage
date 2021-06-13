@@ -20,5 +20,5 @@ WINDOW_SIZE_STATE = NONE
 # main script
 LUA_SCRIPT_FILE = stage.lua
 
-# frame range: 1 ~ 60
+# frame range: 0 ~ 60
 FRAMES_PER_SECOND = 5
