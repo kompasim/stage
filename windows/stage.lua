@@ -1,6 +1,6 @@
--- stage script file
-
 --[[
+
+    stage script file
 
 -- api: stage is a SDL2 implementation for lua, u can use these apis below to draw something on the stage ...
 
@@ -62,7 +62,7 @@
 print("lua Stage file ...")
 
 function Stage_start()
-    -- print('lua Stage_start  ...')
+    -- print('lua Stage_start [call once when program start] ...')
     --
     audio.initAudio()
     audio.playMusic('./road.wav', 100)
@@ -99,20 +99,19 @@ function Stage_start()
 end
 
 function Stage_stop()
-    -- print('lua Stage_stop ...')
+    -- print('lua Stage_stop [call once when program stop] ...')
 end
 
 function Stage_before()
-    -- print('lua Stage_before ...')
+    -- print('lua Stage_before [call when per frame start] ...')
 end
 
 function Stage_handle(name, value)
-    -- print('lua Stage_handle ...')
+    -- print('lua Stage_handle [call when receive an event] ...')
     if name == "SDL_QUIT" then
-        -- stage.doExit()
+        stage.doExit()
     elseif name == "SDL_WINDOWEVENT" then
         -- window event, value is event type
-        print("WINDOW:", value)
     elseif name == "SDL_CLIPBOARDUPDATE" then
         -- clipboard update
     elseif name == "SDL_DROPFILE" then
@@ -130,8 +129,6 @@ function Stage_handle(name, value)
     elseif name == "SDL_MOUSEWHEEL" then
         -- mouse wheel, direction: forward 1, backward -1
     end
-
-    
     -- print("-->event:", name, value)
 end
 
@@ -139,7 +136,7 @@ local x = 0;
 local y = 200
 
 function Stage_update()
-    -- print('lua Stage_update ...')
+    -- print('lua Stage_update [call every frame to update] ...')
     if x > 150 then
         render.setColor(100, 10, 10, 200)
         y = 100
@@ -148,7 +145,7 @@ function Stage_update()
 end
 
 function Stage_render()
-    -- print('lua Stage_render ...')
+    -- print('lua Stage_render [call every frame to draw] ...')
     render.drawLine(x, y, 0, 0);
     render.drawPoint(x, y + 10);
     render.drawRect(x, y + 20, 20, 20);
@@ -156,5 +153,5 @@ function Stage_render()
 end
 
 function Stage_after()
-    -- print('lua Stage_after ...')
+    -- print('lua Stage_after [call when per frame end] ...')
 end
