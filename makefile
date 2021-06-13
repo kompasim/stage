@@ -19,6 +19,7 @@ CFLAGS = -lmingw32 -lSDL2main -lSDL2 -lSDL2_image -lSDL2_ttf -O2 # -mwindows
 CC = gcc
 
 # others
+SRC_SCRIPT = ./scripts/*
 SRC_OTHERS = ./others/*
 DST_WINDOWS = ./windows/
 
@@ -35,6 +36,7 @@ SRC_DSL_TTF_DLL = $(SDL_TTF_DIR)/bin/SDL2_ttf.dll
 run: $(SRC)
 	@rm -rf $(DST_WINDOWS)*
 	@$(CC) $(SRC) $(SDL_FLAGS) $(SDL_IMG_FLAGS) $(SDL_TTF_FLAGS) $(CFLAGS) -o $(DST)
+	@cp -ri $(SRC_SCRIPT) $(DST_WINDOWS)
 	@cp -ri $(SRC_OTHERS) $(DST_WINDOWS)
 	@cp $(SRC_DSL_DLL) $(DST_WINDOWS)
 	@cp $(SRC_DSL_IMG_DLL) $(DST_WINDOWS)

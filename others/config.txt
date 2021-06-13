@@ -21,4 +21,4 @@ IS_AUTO_RENDER = TRUE
 WINDOW_SIZE_STATE = NONE
 
 # main script
-MAIN_SCRIPT = stage.lua
+MAIN_SCRIPT_FILE = stage.lua

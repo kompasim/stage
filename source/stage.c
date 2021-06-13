@@ -8,6 +8,7 @@
 #include "window.c"
 #include "render.c"
 #include "others.c"
+#include "bridge.c"
 #include "test.c"
 
 // config
@@ -24,6 +25,7 @@ bool windowIsHidden = false;
 bool windowOnTop = false;
 bool windowSkipTask = false;
 char *windowSizeState = "EMPTY";
+char *mainScriptFile = "main.lua";
 
 // sdl
 SDL_Window *window = NULL;
@@ -55,6 +57,8 @@ void getArgs(char *left, char *right)
         automatic = is_similar(right, "TRUE");
     else if (is_similar(left, "WINDOW_SIZE_STATE"))
         windowSizeState = right;
+    else if (is_similar(left, "MAIN_SCRIPT_FILE"))
+        mainScriptFile = right;
     else
         return;
 }

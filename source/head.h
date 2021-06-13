@@ -14,6 +14,13 @@
 #define SIMPLE_SDL_AUDIO
 #endif
 
+// #ifndef LUA_SCRIPT_LIB
+// #include "lua.h"
+// #include "lualib.h"
+// #include "lauxlib.h"
+// #define LUA_SCRIPT_LIB
+// #endif
+
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>

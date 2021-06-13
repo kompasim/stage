@@ -33,7 +33,7 @@ void message(char * msg)
     #endif
 }
 
-void error(char *msg)
+void error(const char *msg)
 {
     char txt[1024];
     sprintf(txt, "ERR:%s", msg);

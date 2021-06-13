@@ -2,11 +2,15 @@
 
 #include "head.h"
 
+extern char *mainScriptFile;
+
 void testCode()
 {
     setIcon("app.png");
     setCursor(11);
     renderTest();
+    // 
+
 }
 
 void testF1()
