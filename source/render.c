@@ -124,10 +124,11 @@ void setPort(int x, int y, int w, int h)
     SDL_RenderSetViewport(renderer, &rect);
 }
 
-void getPort()
+SDL_Rect getPort()
 {
     SDL_Rect rect;
     SDL_RenderGetViewport(renderer, &rect);
+    return rect;
 }
 
 void setClip(int x, int y, int w, int h)
@@ -136,10 +137,11 @@ void setClip(int x, int y, int w, int h)
     SDL_RenderSetClipRect(renderer, &rect);
 }
 
-void getClip()
+SDL_Rect getClip()
 {
     SDL_Rect rect;
     SDL_RenderGetClipRect(renderer, &rect);
+    return rect;
 }
 
 

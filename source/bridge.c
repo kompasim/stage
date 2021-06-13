@@ -69,6 +69,15 @@ void Bridge_registerTableNum(Bridge *this, char *key, double value)
     Lua_registerTableNum(this->L, key, value);
 }
 
+void Lua_registerRectTable(lua_State *L, SDL_Rect rect)
+{
+    lua_newtable(L);
+    Lua_registerTableNum(L, "x", rect.x);
+    Lua_registerTableNum(L, "y", rect.y);
+    Lua_registerTableNum(L, "w", rect.w);
+    Lua_registerTableNum(L, "h", rect.h);
+}
+
 static int luaTestFunc(lua_State* L)
 {
     double op1 = luaL_checknumber(L,1);
@@ -198,8 +207,9 @@ static int luaSetPort(lua_State* L)
 
 static int luaGetPort(lua_State* L)
 {
-
-    return 0;
+    SDL_Rect rect = getPort();
+    Lua_registerRectTable(L, rect);
+    return 1;
 }
 
 static int luaSetClip(lua_State* L)
@@ -214,8 +224,9 @@ static int luaSetClip(lua_State* L)
 
 static int luaGetClip(lua_State* L)
 {
-
-    return 0;
+    SDL_Rect rect = getClip();
+    Lua_registerRectTable(L, rect);
+    return 1;
 }
 
 static int luaDrawPoint(lua_State* L)

@@ -14,9 +14,13 @@ api: stage is a SDL2 implementation for lua, u can use these apis below to draw 
     doRender : render manually after set auto false
     doClear : clear stage with current color
     setColor
+    getColor
     setScale
+    getScale
     setPort
+    getPort
     setClip
+    getClip
     drawPoint
     drawLine
     drawRect
@@ -55,6 +59,7 @@ function Stage_start()
     render.drawText(text2, 0, 0, 0, 0, 300, 325, 0, 0, font, 24, false, false, 0, 0.5, 0.5)
     --
     render.setColor(200, 250, 250, 200)
+    --
 end
 
 function Stage_stop()
