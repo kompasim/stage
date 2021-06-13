@@ -112,7 +112,6 @@ function Stage_handle(name, value)
         stage.doExit()
     elseif name == "SDL_WINDOWEVENT" then
         -- window event, value is event type
-        print("WINDOW:", value)
     elseif name == "SDL_CLIPBOARDUPDATE" then
         -- clipboard update
     elseif name == "SDL_DROPFILE" then
