@@ -270,6 +270,46 @@ static int luaFillRect(lua_State* L)
     return 0;
 }
 
+static int luaInitAudio(lua_State* L)
+{
+    initAudio();
+    return 0;
+}
+
+static int luaPlayMusic(lua_State* L)
+{
+    const char *path = luaL_checkstring(L, 1);
+    double volume = luaL_checknumber(L,2);
+    playMusic(path, volume);
+    return 0;
+}
+
+static int luaPlaySound(lua_State* L)
+{
+    const char *path = luaL_checkstring(L, 1);
+    double volume = luaL_checknumber(L,2);
+    playSound(path, volume);
+    return 0;
+}
+
+static int luaPauseAudio(lua_State* L)
+{
+    pauseAudio();
+    return 0;
+}
+
+static int luaResumeAudio(lua_State* L)
+{
+    unpauseAudio();
+    return 0;
+}
+
+static int luaEndAudio(lua_State* L)
+{
+    endAudio();
+    return 0;
+}
+
 void Bridge_register(Bridge *this)
 {
     //
@@ -296,6 +336,15 @@ void Bridge_register(Bridge *this)
     Bridge_registerTableFunc(this, "drawRect", luaDrawRect);
     Bridge_registerTableFunc(this, "fillRect", luaFillRect);
     lua_setglobal(this->L, "render");
+    // audio
+    lua_newtable(this->L);
+    Bridge_registerTableFunc(this, "initAudio", luaInitAudio);
+    Bridge_registerTableFunc(this, "playMusic", luaPlayMusic);
+    Bridge_registerTableFunc(this, "playSound", luaPlaySound);
+    Bridge_registerTableFunc(this, "pauseAudio", luaPauseAudio);
+    Bridge_registerTableFunc(this, "resumeAudio", luaResumeAudio);
+    Bridge_registerTableFunc(this, "endAudio", luaEndAudio);
+    lua_setglobal(this->L, "audio");
 
 
 }

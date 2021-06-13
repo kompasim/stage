@@ -34,6 +34,9 @@ print("lua Stage file ...")
 
 function Stage_start()
     print('lua Stage_start  ...')
+    --
+    audio.initAudio()
+    audio.playMusic('./road.wav', 100)
     -- 
     render.setColor(10, 10, 10, 200)
     render.doClear()

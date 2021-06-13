@@ -7,6 +7,12 @@ api: stage is a SDL2 implementation for lua, u can use these apis below to draw 
 * window
 
 * audio
+    initAudio
+    playMusic
+    playSound
+    pauseAudio
+    resumeAudio
+    endAudio
 
 * render
     setAuto : true, false auto render after drawing
@@ -34,6 +40,9 @@ print("lua Stage file ...")
 
 function Stage_start()
     print('lua Stage_start  ...')
+    --
+    audio.initAudio()
+    audio.playMusic('./road.wav', 100)
     -- 
     render.setColor(10, 10, 10, 200)
     render.doClear()
