@@ -26,11 +26,35 @@ api: stage is a SDL2 implementation for lua, u can use these apis below to draw 
 
 ]]
 
-print("stage lua file ...")
+print("lua Stage file ...")
 
 function Stage_start()
     print('lua Stage_start  ...')
-    -- render.setClip(50, 50, 200, 200)
+    -- 
+    render.setColor(10, 10, 10, 200)
+    render.doClear()
+    -- 
+    --
+    render.setColor(200, 0, 150, 255)
+    render.fillRect(225, 375, 50, 50)
+    --
+    render.setColor(200, 150, 0, 255)
+    render.drawRect(300, 375, 50, 50)
+    --
+    render.setColor(0, 200, 150, 255);
+    render.drawLine(10, 475, 380, 475);
+    -- 
+    render.drawImage("./lua.png", 0, 0, 0, 0, 100, 375, 0, 0, false, false, 0, 0.5, 0.5)
+    --
+    render.setColor(200, 200, 0, 255)
+    local text1 = "Hello World!"
+    local text2 = "!ﺎﻴﻧﯗﺩ ﺎﺑﺎﮬﺭﻪﻣ"
+    local font = "ukij.ttf";
+    render.drawText(text1, 0, 0, 0, 0, 300, 225, 0, 0, font, 24, true, false, 0, 0.5, 0.5)
+    render.drawText(text1, 0, 0, 0, 0, 300, 275, 0, 0, font, 24, false, false, 0, 0.5, 0.5)
+    render.drawText(text2, 0, 0, 0, 0, 300, 325, 0, 0, font, 24, false, false, 0, 0.5, 0.5)
+    --
+    render.setColor(200, 250, 250, 200)
 end
 
 function Stage_stop()
@@ -46,13 +70,12 @@ function Stage_handle()
 end
 
 local x = 0;
-local y = 100
+local y = 200
 
 function Stage_update()
     if x > 150 then
-        render.setScale(1, 2)
-        render.setBlend(1)
         render.setColor(100, 10, 10, 200)
+        y = 100
     end
     x = x + 25;
 end

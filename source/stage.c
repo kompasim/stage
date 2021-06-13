@@ -47,8 +47,8 @@ void Stage_start(Stage *this, Bridge *bridge)
 {
     this->bridge = bridge;
     this->running = true;
-    Stage_notify(this, "start");
     testCode();
+    Stage_notify(this, "start");
 }
 
 void Stage_stop(Stage *this)

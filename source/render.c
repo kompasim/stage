@@ -48,7 +48,7 @@ SDL_Point parseTexture(SDL_Texture *texture, int x, int y, int w, int h, int toX
     return point;
 }
 
-void drawImage(char *path, int x, int y, int w, int h, int toX, int toY, int toW, int toH, bool isFlipX, bool isFlipY, int angle, float anchorX, float anchorY)
+void drawImage(const char *path, int x, int y, int w, int h, int toX, int toY, int toW, int toH, bool isFlipX, bool isFlipY, int angle, float anchorX, float anchorY)
 {
     SDL_Texture *texture = IMG_LoadTexture(renderer, path);
     SDL_Rect srcRect, dstRect;
@@ -61,7 +61,7 @@ void drawImage(char *path, int x, int y, int w, int h, int toX, int toY, int toW
     if (automatic) doRender();
 }
 
-void drawText(char *text, int x, int y, int w, int h, int toX, int toY, int toW, int toH, char *font, int size, bool isFlipX, bool isFlipY, int angle, float anchorX, float anchorY)
+void drawText(const char *text, int x, int y, int w, int h, int toX, int toY, int toW, int toH, const char *font, int size, bool isFlipX, bool isFlipY, int angle, float anchorX, float anchorY)
 {
     font = strlen(font) > 0 ? font : "ukij.ttf";
     size = get_min(get_max(size, 1), 100);
@@ -161,33 +161,4 @@ void fillRect(int x, int y, int w, int h)
     SDL_Rect rect = {x, y, w, h};
     SDL_RenderFillRect(renderer, &rect);
     if (automatic) doRender();
-}
-
-
-void renderTest()
-{
-    printf("RENDER_TEST:\n");
-    setColor(50, 50, 50, 255);
-    doClear();
-    doRender();
-    //
-    drawImage("./lua.png", 0, 0, 0, 0, 100, 350, 0, 0, false, false, 0, 0.5, 0.5);
-    //
-    char *text1 = "Hello World!";
-    char *text2 = "!ﺎﻴﻧﯗﺩ ﺎﺑﺎﮬﺭﻪﻣ";
-    char *font = "ukij.ttf";
-    setColor(200, 0, 0, 255);
-    drawText(text1, 0, 0, 0, 0, 100, 200, 0, 0, font, 24, true, false, 0, 0.5, 0.5);
-    drawText(text1, 50, 0, 0, 0, 100, 225, 0, 0, font, 24, false, false, 0, 0.5, 0.5);
-    drawText(text2, 0, 0, 0, 0, 100, 250, 0, 0, font, 24, false, false, 0, 0.5, 0.5);
-    //
-    setColor(0, 200, 0, 255);
-    fillRect(150, 50, 50, 50);
-    //
-    setColor(0, 200, 0, 255);
-    drawRect(250, 50, 50, 50);
-    //
-    setColor(0, 0, 200, 255);
-    drawLine(10, 10, 300, 300);
-    drawPoint(5, 5);
 }

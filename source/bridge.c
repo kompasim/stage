@@ -62,6 +62,48 @@ static int luaDoRender(lua_State* L)
     return 0;  
 }
 
+static int luaDrawImage(lua_State* L)
+{
+    const char *path = luaL_checkstring(L, 1);
+    double x = luaL_checknumber(L,2);
+    double y = luaL_checknumber(L,3);
+    double w = luaL_checknumber(L,4);
+    double h = luaL_checknumber(L,5);
+    double toX = luaL_checknumber(L,6);
+    double toY = luaL_checknumber(L,7);
+    double toW = luaL_checknumber(L,8);
+    double toH = luaL_checknumber(L,9);
+    bool isFlipX = lua_toboolean(L,10);
+    bool isFlipY = lua_toboolean(L,11);
+    bool angle = luaL_checknumber(L,12);
+    double anchorX = luaL_checknumber(L,13);
+    double anchorY = luaL_checknumber(L,14);
+    drawImage(path, x, y, w, h, toX, toY, toW, toH, isFlipX, isFlipY, angle, anchorX, anchorY);
+    return 0;  
+}
+
+static int luaDrawText(lua_State* L)
+{
+    const char *text = luaL_checkstring(L, 1);
+    double x = luaL_checknumber(L,2);
+    double y = luaL_checknumber(L,3);
+    double w = luaL_checknumber(L,4);
+    double h = luaL_checknumber(L,5);
+    double toX = luaL_checknumber(L,6);
+    double toY = luaL_checknumber(L,7);
+    double toW = luaL_checknumber(L,8);
+    double toH = luaL_checknumber(L,9);
+    const char *font = luaL_checkstring(L, 10);
+    double size = luaL_checknumber(L,11);
+    bool isFlipX = lua_toboolean(L,12);
+    bool isFlipY = lua_toboolean(L,13);
+    bool angle = luaL_checknumber(L,14);
+    double anchorX = luaL_checknumber(L,15);
+    double anchorY = luaL_checknumber(L,16);
+    drawText(text, x, y, w, h, toX, toY, toW, toH, font, size, isFlipX, isFlipY, angle, anchorX, anchorY);
+    return 0;  
+}
+
 static int luaDoClear(lua_State* L)
 {
     doClear();
@@ -164,10 +206,11 @@ void Bridge_register(Bridge *this)
     Bridge_registerTableFunc(this, "setAuto", luaSetAuto);
     Bridge_registerTableFunc(this, "setBlend", luaSetBlend);
     Bridge_registerTableFunc(this, "doRender", luaDoRender);
+    Bridge_registerTableFunc(this, "drawImage", luaDrawImage);
+    Bridge_registerTableFunc(this, "drawText", luaDrawText);
     Bridge_registerTableFunc(this, "doClear", luaDoClear);
     Bridge_registerTableFunc(this, "setColor", luaSetColor);
     Bridge_registerTableFunc(this, "setScale", luaSetScale);
-
     Bridge_registerTableFunc(this, "setPort", luaSetPort);
     Bridge_registerTableFunc(this, "setClip", luaSetClip);
     Bridge_registerTableFunc(this, "drawPoint", luaDrawPoint);

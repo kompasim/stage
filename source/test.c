@@ -8,7 +8,6 @@ void testCode()
     printf("TEST:\n");
     setIcon("app.png");
     setCursor(11);
-    renderTest();
     //
 }
 
