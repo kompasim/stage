@@ -57,5 +57,7 @@ void Bridge_notifyWithInt(Bridge *, const char *, int);
 void Bridge_notifyWithString(Bridge *, const char *, const char *);
 void Bridge_notifyWithPoint(Bridge *, const char *, SDL_Point);
 
+void printRect(SDL_Rect);
+
 #define HEAD_FUNCTIONS
 #endif

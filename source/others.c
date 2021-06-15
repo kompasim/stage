@@ -27,3 +27,8 @@ char *getClipboard()
     return SDL_GetClipboardText();
 }
 
+void printRect(SDL_Rect rect)
+{
+    printf("RECT: x = %d, y = %d, w = %d, h = %d", rect.x, rect.y, rect.h, rect.h);
+}
+

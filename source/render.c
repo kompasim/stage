@@ -29,8 +29,8 @@ SDL_Point parseTexture(SDL_Texture *texture, int x, int y, int w, int h, int toX
     int leftH = (textureH - y);
     w = w > 0 ? w : leftW;
     h = h > 0 ? h : leftH;
-    toW = toW > 0 ? toW : leftW;
-    toH = toH > 0 ? toH : leftH;
+    toW = toW > 0 ? toW : w;
+    toH = toH > 0 ? toH : h;
     int indentX = toW * anchorX;
     int indentY = toH * anchorY;
     (*src).x = x;
