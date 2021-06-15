@@ -160,11 +160,9 @@ function Stage_render()
     render.drawRect(x, y + 20, 20, 20);
     render.fillRect(x, y + 50, 20, 20);
     --
-    print("\n\n\n--->", aniIndex)
     render.setColor(255, 255, 255, 255)
     render.fillRect(aniX - aniBg, aniY - aniBg, aniBg * 2, aniBg * 2);
     render.drawImage(string.format("./others/animations/img_%02d.jpg", math.floor(aniIndex)), 0, 0, 0 , 0, aniX, aniY, 0, 0, false, false, 0, 0.5, 0.5)
-    -- render.drawImage("./others/animations/test.jpg", 0, 0, 0 , 0, 0, 0, 0, 0, false, false, 0, 0, 0)
 end
 
 function Stage_after()
