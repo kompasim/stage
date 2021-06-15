@@ -65,7 +65,7 @@ function Stage_start()
     -- print('lua Stage_start [call once when program start] ...')
     --
     audio.initAudio()
-    audio.playMusic('./road.wav', 100)
+    audio.playMusic('./others/road.wav', 100)
     -- 
     render.setColor(10, 10, 10, 200)
     render.doClear()
@@ -80,19 +80,19 @@ function Stage_start()
     render.setColor(0, 200, 150, 255);
     render.drawLine(10, 475, 380, 475);
     -- 
-    render.drawImage("./lua.png", 0, 0, 0, 0, 100, 375, 0, 0, false, false, 0, 0.5, 0.5)
+    render.drawImage("./others/lua.png", 0, 0, 0, 0, 100, 375, 0, 0, false, false, 0, 0.5, 0.5)
     --
     render.setColor(200, 200, 0, 255)
     local text1 = "Hello World!"
     local text2 = "!ﺎﻴﻧﯗﺩ ﺎﺑﺎﮬﺭﻪﻣ"
-    local font = "ukij.ttf";
+    local font = "./others/ukij.ttf";
     render.drawText(text1, 0, 0, 0, 0, 300, 225, 0, 0, font, 24, true, false, 0, 0.5, 0.5)
     render.drawText(text1, 0, 0, 0, 0, 300, 275, 0, 0, font, 24, false, false, 0, 0.5, 0.5)
     render.drawText(text2, 0, 0, 0, 0, 300, 325, 0, 0, font, 24, false, false, 0, 0.5, 0.5)
     --
     render.setColor(200, 250, 250, 200)
     --
-    window.setIcon("app.png")
+    window.setIcon("./others/app.png")
     window.setCursor(11)
     window.setTitle(string.format("Stage %s", os.date("%Y-%m-%d  %H-%M-%S", os.time())))
     --
