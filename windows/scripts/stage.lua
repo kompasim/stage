@@ -135,6 +135,13 @@ end
 local x = 0;
 local y = 200
 
+local aniIndex = 0
+local aniCount = 15
+local aniX = 475
+local aniY = 325
+local aniBg = 75
+local aniSpeed = 0.5
+
 function Stage_update()
     -- print('lua Stage_update [call every frame to update] ...')
     if x > 150 then
@@ -142,6 +149,8 @@ function Stage_update()
         y = 100
     end
     x = x + 25;
+    --
+    aniIndex = aniIndex > aniCount and 1 or aniIndex + 1 * aniSpeed
 end
 
 function Stage_render()
@@ -150,6 +159,12 @@ function Stage_render()
     render.drawPoint(x, y + 10);
     render.drawRect(x, y + 20, 20, 20);
     render.fillRect(x, y + 50, 20, 20);
+    --
+    print("\n\n\n--->", aniIndex)
+    render.setColor(255, 255, 255, 255)
+    render.fillRect(aniX - aniBg, aniY - aniBg, aniBg * 2, aniBg * 2);
+    render.drawImage(string.format("./others/animations/img_%02d.jpg", math.floor(aniIndex)), 0, 0, 0 , 0, aniX, aniY, 0, 0, false, false, 0, 0.5, 0.5)
+    -- render.drawImage("./others/animations/test.jpg", 0, 0, 0 , 0, 0, 0, 0, 0, false, false, 0, 0, 0)
 end
 
 function Stage_after()

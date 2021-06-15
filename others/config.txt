@@ -1,7 +1,7 @@
 
 # window configs
 WINDOW_TITLE = STAGE
-WINDOW_WIDTH = 400
+WINDOW_WIDTH = 600
 WINDOW_HEIGHT = 500
 
 # window options
@@ -21,4 +21,4 @@ WINDOW_SIZE_STATE = NONE
 LUA_SCRIPT_FILE = ./scripts/stage.lua
 
 # frame range: 0 ~ 60
-FRAMES_PER_SECOND = 60
+FRAMES_PER_SECOND = 30
