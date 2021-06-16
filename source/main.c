@@ -2,9 +2,9 @@
 
 #include "head.h"
 #include "tools.c"
+#include "others.c"
 #include "window.c"
 #include "render.c"
-#include "others.c"
 #include "test.c"
 #include "stage.c"
 #include "bridge.c"

@@ -11,6 +11,7 @@
     -- getTick
     -- setClipboard
     -- getClipboard
+    -- saveScreenshot
 
 --  window
     -- show

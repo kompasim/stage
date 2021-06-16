@@ -137,6 +137,14 @@ void Stage_handle(Stage *this ,SDL_Event event)
     {
         const char *key = SDL_GetKeyName(event.key.keysym.sym);
         Bridge_notifyWithString(bridge, "SDL_KEYDOWN", key);
+        if (event.key.keysym.sym == SDLK_F1)
+        {
+            testF1();
+        }
+        else if (event.key.keysym.sym == SDLK_F2)
+        {
+            testF2();
+        }
     }
     else if (event.type == SDL_KEYUP)
     {

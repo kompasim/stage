@@ -505,6 +505,15 @@ static int luaGetClipboard(lua_State* L)
     return 1;
 }
 
+static int luaSaveScreenshot(lua_State* L)
+{
+    const char *path = luaL_checkstring(L, 1);
+    double x = luaL_checknumber(L,2);
+    double y = luaL_checknumber(L,3);
+    saveScreenshot(path, x, y);
+    return 0;
+}
+
 //////////////////////////////////////////////////// register ////////////////////////////////////////////////////////////////
 
 void Bridge_register(Bridge *this)
@@ -568,6 +577,7 @@ void Bridge_register(Bridge *this)
     Bridge_registerTableFunc(this, "getTick", luaGetTick);
     Bridge_registerTableFunc(this, "setClipboard", luaSetClipboard);
     Bridge_registerTableFunc(this, "getClipboard", luaGetClipboard);
+    Bridge_registerTableFunc(this, "saveScreenshot", luaSaveScreenshot);
     lua_setglobal(this->L, "stage");
 
 }
