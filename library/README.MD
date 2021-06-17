@@ -14,7 +14,7 @@
 
 * LUA: 
   
-1. download [LuaDist](https://github.com/LuaDist/Binaries/archive/LuaDist-batteries-0.9.8-Windows-x86.zip) Source Code to this directory.
+1. download [LuaDist](http://www.lua.org/ftp/lua-5.4.3.tar.gz) Source Code to this directory.
 2. unzip it
 3. open `./library/lua-5.4.3/` directory
 4. edit the file `Makefile` and change the line `PLAT= guess` to `PLAT= mingw`
