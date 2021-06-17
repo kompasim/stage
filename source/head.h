@@ -8,6 +8,7 @@
 #include <string.h>
 #include <direct.h>
 #include <stdlib.h>
+#include <math.h>
 
 #ifndef SIMPLE_SDL_AUDIO
 #include "audio/audio.h"

@@ -60,6 +60,8 @@
 
 ]]
 
+local self = {}
+
 print("lua Stage file ...")
 
 function Stage_start()
@@ -97,6 +99,18 @@ function Stage_start()
     window.setCursor(11)
     window.setTitle(string.format("Stage %s", os.date("%Y-%m-%d  %H-%M-%S", os.time())))
     --
+    render.setColor(50, 100, 150, 200)
+    render.setAuto(false)
+    self.fillCircle(475, 425, 50)
+    render.setAuto(true)
+    --
+    render.setColor(100, 150, 100, 200)
+    render.setAuto(false)
+    self.drawCircle(475, 425, 60)
+    render.setAuto(true)
+
+
+
 end
 
 function Stage_stop()
@@ -139,7 +153,7 @@ local y = 200
 local aniIndex = 0
 local aniCount = 15
 local aniX = 475
-local aniY = 325
+local aniY = 275
 local aniBg = 75
 local aniSpeed = 0.5
 
@@ -169,3 +183,35 @@ end
 function Stage_after()
     -- print('lua Stage_after [call when per frame end] ...')
 end
+
+function self.fillCircle(centerX, centerY, radius)
+    for x=1,radius do
+        local y = math.sqrt(math.pow(radius, 2) - math.pow(x, 2))
+        render.drawLine(centerX + x, centerY + y, centerX + x, centerY - y)
+        render.drawLine(centerX - x, centerY + y, centerX - x, centerY - y)
+    end
+    render.drawLine(centerX, centerY + radius, centerX, centerY - radius)
+    render.doRender()
+end
+
+function self.drawCircle(centerX, centerY, radius)
+    local function drawDot(x, y)
+        render.drawPoint(centerX + x, centerY + y)
+    end
+    for i=0,radius do
+        local j = math.sqrt(math.pow(radius, 2) - math.pow(i, 2))
+        if i <= j + 1 then
+            drawDot(i, j)
+            drawDot(j, i)
+            drawDot(-i, j)
+            drawDot(-j, i)
+            drawDot(i, -j)
+            drawDot(j, -i)
+            drawDot(-i, -j)
+            drawDot(-j, -i)
+        end
+    end
+    render.doRender()
+end
+
+
