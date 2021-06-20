@@ -127,13 +127,6 @@ static int luaTestFunc(lua_State* L)
 
 //////////////////////////////////////////////////// render ////////////////////////////////////////////////////////////////
 
-static int luaSetAuto(lua_State* L)
-{
-    bool m = lua_toboolean(L,1);
-    setAuto(m);
-    return 0;  
-}
-
 static int luaSetBlend(lua_State* L)
 {
     double m = luaL_checknumber(L,1);
@@ -548,7 +541,6 @@ void Bridge_register(Bridge *this)
     // lua_register(this->L, "drawPoint", luaDrawPoint);
     // render
     lua_newtable(this->L);
-    Bridge_registerTableFunc(this, "setAuto", luaSetAuto);
     Bridge_registerTableFunc(this, "setBlend", luaSetBlend);
     Bridge_registerTableFunc(this, "doRender", luaDoRender);
     Bridge_registerTableFunc(this, "drawImage", luaDrawImage);

@@ -48,8 +48,6 @@ void parseLine(char *left, char *right)
         windowOnTop = is_similar(right, "TRUE");
     else if (is_similar(left, "WINDOW_SKIP_TASK"))
         windowSkipTask = is_similar(right, "TRUE");
-    else if (is_similar(left, "IS_AUTO_RENDER"))
-        automatic = is_similar(right, "TRUE");
     else if (is_similar(left, "WINDOW_SIZE_STATE"))
         windowSizeState = right;
     else if (is_similar(left, "LUA_SCRIPT_FILE"))

@@ -2,11 +2,6 @@
 
 #include "head.h"
 
-void setAuto(bool isAuto)
-{
-    automatic = isAuto;
-}
-
 void setBlend(int mode)
 {
     SDL_SetRenderDrawBlendMode(renderer, mode);
@@ -55,7 +50,6 @@ void drawImage(const char *path, int x, int y, int w, int h, int toX, int toY, i
     if (isFlipY) flip |= SDL_FLIP_VERTICAL;
     SDL_RenderCopyEx(renderer, texture, &srcRect, &dstRect, angle, &point, flip);
     SDL_DestroyTexture(texture);
-    if (automatic) doRender();
 }
 
 void drawText(const char *text, int x, int y, int w, int h, int toX, int toY, int toW, int toH, const char *font, int size, bool isFlipX, bool isFlipY, int angle, float anchorX, float anchorY)
@@ -78,13 +72,11 @@ void drawText(const char *text, int x, int y, int w, int h, int toX, int toY, in
     TTF_CloseFont(ttf);
     SDL_FreeSurface(surface);
     SDL_DestroyTexture(texture);
-    if (automatic) doRender();
 }
 
 void doClear()
 {
     SDL_RenderClear(renderer);
-    if (automatic) doRender();
 }
 
 void setColor( int r, int g, int b, int a)
@@ -145,25 +137,21 @@ SDL_Rect getClip()
 void drawPoint(int x, int y)
 {
     SDL_RenderDrawPoint(renderer, x, y);
-    if (automatic) doRender();
 }
 
 void drawLine(int x, int y, int toX, int toY)
 {
     SDL_RenderDrawLine(renderer, x, y, toX, toY);
-    if (automatic) doRender();
 }
 
 void drawRect(int x, int y, int w, int h)
 {
     SDL_Rect rect = {x, y, w, h};
     SDL_RenderDrawRect(renderer, &rect);
-    if (automatic) doRender();
 }
 
 void fillRect(int x, int y, int w, int h)
 {
     SDL_Rect rect = {x, y, w, h};
     SDL_RenderFillRect(renderer, &rect);
-    if (automatic) doRender();
 }

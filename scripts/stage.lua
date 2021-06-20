@@ -43,7 +43,6 @@
     -- destroyAudio
 
 -- render
-    -- setAuto : true, false auto render after drawing
     -- setBlend : 0 no blending, 1 alpha blending, 2 additive blending, 4 color modulate, 8 color multiply
     -- doRender : render manually after set auto false
     -- doClear : clear stage with current color
@@ -70,13 +69,9 @@ print("lua Stage file ...")
 
 function Stage_start()
     -- print('lua Stage_start [call once when program start] ...')
-    --
-    audio.initAudio()
-    audio.playMusic('../others/road.wav', -1)
     -- 
     render.setColor(10, 10, 10, 200)
     render.doClear()
-    -- 
     --
     render.setColor(200, 0, 150, 255)
     render.fillRect(225, 375, 50, 50)
@@ -104,17 +99,12 @@ function Stage_start()
     window.setTitle(string.format("Stage %s", os.date("%Y-%m-%d  %H-%M-%S", os.time())))
     --
     render.setColor(50, 100, 150, 200)
-    render.setAuto(false)
     self.fillCircle(475, 425, 50)
-    render.setAuto(true)
     --
     render.setColor(100, 150, 100, 200)
-    render.setAuto(false)
     self.drawCircle(475, 425, 60)
-    render.setAuto(true)
-
-
-
+    -- 
+    render.doRender()
 end
 
 function Stage_stop()
@@ -137,13 +127,8 @@ function Stage_handle(name, value)
         -- drop file, value is file name
     elseif name == "SDL_KEYDOWN" then
         -- keyboard down, key: F1
-        local playing = audio.playingMusic()
-        local paused = audio.pausedMusic()
-        print("isPlaying:", playing, paused)
-        if playing and not paused then
-            audio.pauseMusic()
-        elseif playing and paused then
-            audio.resumeMusic()
+        if value == "Space" then
+            self.audioTest()
         end
     elseif name == "SDL_KEYUP" then
         -- keyboard up
@@ -190,6 +175,8 @@ function Stage_render()
     render.setColor(255, 255, 255, 255)
     render.fillRect(aniX - aniBg, aniY - aniBg, aniBg * 2, aniBg * 2);
     render.drawImage(string.format("../others/animations/img_%02d.jpg", math.floor(aniIndex)), 0, 0, 0 , 0, aniX, aniY, 0, 0, false, false, 0, 0.5, 0.5)
+    --
+    render.doRender()
 end
 
 function Stage_after()
@@ -224,6 +211,19 @@ function self.drawCircle(centerX, centerY, radius)
         end
     end
     render.doRender()
+end
+
+function self.audioTest()
+    local playing = audio.playingMusic()
+    local paused = audio.pausedMusic()
+    if not playing then
+        audio.initAudio()
+        audio.playMusic('../others/road.wav', -1)
+    elseif not paused then
+        audio.pauseMusic()
+    elseif paused then
+        audio.resumeMusic()
+    end
 end
 
 
