@@ -2,20 +2,27 @@
 
 #include "head.h"
 
+Mix_Music *sound = NULL;
+
 void initAudio(void)
 {
     Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
 }
 
-void playMusic(const char *filename, int loop)
+
+void stopMusic()
 {
-    Mix_Music *sound=Mix_LoadMUS(filename);
-	Mix_PlayMusic(sound, loop); 
+    if (sound == NULL) return;
+    Mix_HaltMusic();
+    Mix_FreeMusic(sound);
+    sound = NULL;
 }
 
-void pauseMusic()
+void playMusic(const char *filename, int loop)
 {
-    Mix_PauseMusic();
+    stopMusic();
+    sound = Mix_LoadMUS(filename);
+	Mix_PlayMusic(sound, loop); 
 }
 
 void resumeMusic()
@@ -23,9 +30,20 @@ void resumeMusic()
     Mix_ResumeMusic();
 }
 
+void pauseMusic()
+{
+    Mix_PauseMusic();
+}
+
+
 bool playingMusic()
 {
     return Mix_PlayingMusic();
+}
+
+bool pausedMusic()
+{
+    return Mix_PausedMusic();
 }
 
 bool volumeMusic(int volume)

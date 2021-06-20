@@ -33,8 +33,10 @@
 -- audio
     -- initAudio
     -- playMusic
+    -- stopMusic
     -- pauseMusic
     -- resumeMusic
+    -- pausedMusic
     -- playingMusic
     -- volumeMusic
     -- playSound
@@ -69,8 +71,8 @@ print("lua Stage file ...")
 function Stage_start()
     -- print('lua Stage_start [call once when program start] ...')
     --
-    -- audio.initAudio()
-    -- audio.playMusic('../others/road.wav', -1)
+    audio.initAudio()
+    audio.playMusic('../others/road.wav', -1)
     -- 
     render.setColor(10, 10, 10, 200)
     render.doClear()
@@ -135,6 +137,14 @@ function Stage_handle(name, value)
         -- drop file, value is file name
     elseif name == "SDL_KEYDOWN" then
         -- keyboard down, key: F1
+        local playing = audio.playingMusic()
+        local paused = audio.pausedMusic()
+        print("isPlaying:", playing, paused)
+        if playing and not paused then
+            audio.pauseMusic()
+        elseif playing and paused then
+            audio.resumeMusic()
+        end
     elseif name == "SDL_KEYUP" then
         -- keyboard up
     elseif name == "SDL_MOUSEBUTTONDOWN" then

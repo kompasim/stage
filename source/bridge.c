@@ -324,6 +324,12 @@ static int luaPlayMusic(lua_State* L)
     return 0;
 }
 
+static int luaStopMusic(lua_State* L)
+{
+    stopMusic();
+    return 0;
+}
+
 static int luaPauseMusic(lua_State* L)
 {
     pauseMusic();
@@ -334,6 +340,12 @@ static int luaResumeMusic(lua_State* L)
 {
     resumeMusic();
     return 0;
+}
+
+static int luaPausedMusic(lua_State* L)
+{
+    lua_pushboolean(L, pausedMusic());
+    return 1;
 }
 
 static int luaPlayingMusic(lua_State* L)
@@ -559,8 +571,10 @@ void Bridge_register(Bridge *this)
     lua_newtable(this->L);
     Bridge_registerTableFunc(this, "initAudio", luaInitAudio);
     Bridge_registerTableFunc(this, "playMusic", luaPlayMusic);
+    Bridge_registerTableFunc(this, "stopMusic", luaStopMusic);
     Bridge_registerTableFunc(this, "pauseMusic", luaPauseMusic);
     Bridge_registerTableFunc(this, "resumeMusic", luaResumeMusic);
+    Bridge_registerTableFunc(this, "pausedMusic", luaPausedMusic);
     Bridge_registerTableFunc(this, "playingMusic", luaPlayingMusic);
     Bridge_registerTableFunc(this, "volumeMusic", luaVolumeMusic);
     Bridge_registerTableFunc(this, "playSound", luaPlaySound);
