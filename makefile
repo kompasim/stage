@@ -43,8 +43,8 @@ SRC_LUA_DLL = $(LUA_DIR)/*.dll
 run: $(SRC)
 	@rm -rf $(DST_WINDOWS)*
 	@$(CC) $(SRC) $(SDL_FLAGS) $(SDL_IMG_FLAGS) $(SDL_TTF_FLAGS) $(SDL_MIX_FLAGS) $(LUA_FLAGS) $(CFLAGS) -o $(DST)
-	@mkdir $(DST_WINDOWS)/scripts/
-	@mkdir $(DST_WINDOWS)/others/
+#	@mkdir $(DST_WINDOWS)/scripts/
+#	@mkdir $(DST_WINDOWS)/others/
 #	@cp -ri $(SRC_SCRIPT) $(DST_WINDOWS)/scripts/
 #	@cp -ri $(SRC_OTHERS) $(DST_WINDOWS)/others/
 	@cp $(SRC_DSL_DLL) $(DST_WINDOWS)
