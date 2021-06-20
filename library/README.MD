@@ -12,6 +12,10 @@
   
 > dwonload [SDL2_ttf](http://www.libsdl.org/projects/SDL_ttf/release/SDL2_ttf-devel-2.0.15-mingw.tar.gz) development library to this directory and unzip it
 
+* SDL2_mixer: 
+  
+> dwonload [SDL2_mixer](https://www.libsdl.org/projects/SDL_mixer/release/SDL2_mixer-devel-2.0.4-mingw.tar.gz) development library to this directory and unzip it
+
 * LUA: 
   
 1. download [LuaDist](http://www.lua.org/ftp/lua-5.4.3.tar.gz) Source Code to this directory.
