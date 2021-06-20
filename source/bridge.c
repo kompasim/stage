@@ -319,34 +319,47 @@ static int luaInitAudio(lua_State* L)
 static int luaPlayMusic(lua_State* L)
 {
     const char *path = luaL_checkstring(L, 1);
-    double volume = luaL_checknumber(L,2);
-    playMusic(path, volume);
+    int loop = luaL_checkinteger(L, 2);
+    playMusic(path, loop);
+    return 0;
+}
+
+static int luaPauseMusic(lua_State* L)
+{
+    pauseMusic();
+    return 0;
+}
+
+static int luaResumeMusic(lua_State* L)
+{
+    resumeMusic();
+    return 0;
+}
+
+static int luaPlayingMusic(lua_State* L)
+{
+    lua_pushboolean(L, playingMusic());
+    return 1;
+}
+
+static int luaVolumeMusic(lua_State* L)
+{
+    int volume = luaL_checkinteger(L, 1);
+    volumeMusic(volume);
     return 0;
 }
 
 static int luaPlaySound(lua_State* L)
 {
     const char *path = luaL_checkstring(L, 1);
-    double volume = luaL_checknumber(L,2);
-    playSound(path, volume);
+    int loop = luaL_checkinteger(L, 2);
+    playSound(path, loop);
     return 0;
 }
 
-static int luaPauseAudio(lua_State* L)
+static int luaDestroyAudio(lua_State* L)
 {
-    pauseAudio();
-    return 0;
-}
-
-static int luaResumeAudio(lua_State* L)
-{
-    unpauseAudio();
-    return 0;
-}
-
-static int luaEndAudio(lua_State* L)
-{
-    endAudio();
+    destroyAudio();
     return 0;
 }
 
@@ -546,10 +559,12 @@ void Bridge_register(Bridge *this)
     lua_newtable(this->L);
     Bridge_registerTableFunc(this, "initAudio", luaInitAudio);
     Bridge_registerTableFunc(this, "playMusic", luaPlayMusic);
+    Bridge_registerTableFunc(this, "pauseMusic", luaPauseMusic);
+    Bridge_registerTableFunc(this, "resumeMusic", luaResumeMusic);
+    Bridge_registerTableFunc(this, "playingMusic", luaPlayingMusic);
+    Bridge_registerTableFunc(this, "volumeMusic", luaVolumeMusic);
     Bridge_registerTableFunc(this, "playSound", luaPlaySound);
-    Bridge_registerTableFunc(this, "pauseAudio", luaPauseAudio);
-    Bridge_registerTableFunc(this, "resumeAudio", luaResumeAudio);
-    Bridge_registerTableFunc(this, "endAudio", luaEndAudio);
+    Bridge_registerTableFunc(this, "destroyAudio", luaDestroyAudio);
     lua_setglobal(this->L, "audio");
     // window
     lua_newtable(this->L);

@@ -19,4 +19,5 @@ void testF1()
 void testF2()
 {
     printf("F2\n");
+    volumeMusic(50);
 }

@@ -33,10 +33,12 @@
 -- audio
     -- initAudio
     -- playMusic
+    -- pauseMusic
+    -- resumeMusic
+    -- playingMusic
+    -- volumeMusic
     -- playSound
-    -- pauseAudio
-    -- resumeAudio
-    -- endAudio
+    -- destroyAudio
 
 -- render
     -- setAuto : true, false auto render after drawing
@@ -67,8 +69,8 @@ print("lua Stage file ...")
 function Stage_start()
     -- print('lua Stage_start [call once when program start] ...')
     --
-    audio.initAudio()
-    audio.playMusic('../others/road.wav', 100)
+    -- audio.initAudio()
+    -- audio.playMusic('../others/road.wav', -1)
     -- 
     render.setColor(10, 10, 10, 200)
     render.doClear()

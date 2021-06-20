@@ -10,12 +10,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#ifndef SIMPLE_SDL_AUDIO
-#include "audio/audio.h"
-#include "audio/audio.c"
-#define SIMPLE_SDL_AUDIO
-#endif
-
 #ifndef LUA_SCRIPT_LIB
 #include "lua.h"
 #include "lualib.h"

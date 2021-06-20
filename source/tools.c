@@ -102,6 +102,24 @@ bool is_starts(char *source, char *find)
     return strncmp(find, source, strlen(find)) == 0;
 }
 
+bool is_ends(const char *source, const char *find)
+{
+    bool result = true;
+    int fLen = strlen(find);
+    int sLen = strlen(source);
+    for (size_t i = strlen(find); i > 0 ; i--)
+    {
+        int index = fLen - i + 1;
+        char a = find[fLen - index];
+        char b = source[sLen - index];
+        if(a != b)
+        {
+            result = false;
+        }
+    }
+    return result;
+}
+
 char *to_uppercase(char* ch)  
 { 
     int len = strlen(ch);
@@ -119,7 +137,7 @@ char *to_lowercase(char* ch)
     char *temp = (char*)calloc(sizeof(char), len);
     for (int i = 0; i < len; i++)
     {
-        temp[i] = toupper(ch[i]);
+        temp[i] = tolower(ch[i]);
     }
     return temp;
 } 

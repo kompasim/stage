@@ -5,6 +5,7 @@
 #include "others.c"
 #include "window.c"
 #include "render.c"
+#include "audio.c"
 #include "test.c"
 #include "stage.c"
 #include "bridge.c"
