@@ -18,7 +18,7 @@ IS_AUTO_RENDER = TRUE
 WINDOW_SIZE_STATE = NONE
 
 # main script
-LUA_SCRIPT_FILE = ./scripts/stage.lua
+LUA_SCRIPT_FILE = ../scripts/stage.lua
 
 # frame range: 0 ~ 60
 FRAMES_PER_SECOND = 30

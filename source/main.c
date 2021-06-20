@@ -10,7 +10,7 @@
 #include "bridge.c"
 
 // config
-const char *CONFIG_NAME = "./others/config.txt";
+const char *CONFIG_NAME = "../others/config.txt";
 
 // args
 char *windowTitle = "Stage";
@@ -22,7 +22,7 @@ bool windowIsHidden = false;
 bool windowOnTop = false;
 bool windowSkipTask = false;
 char *windowSizeState = "EMPTY";
-char *luaScriptFile = "./scripts/stage.lua";
+char *luaScriptFile = "../scripts/stage.lua";
 int framesPerSecond = 0;
 
 uint32_t frameTime = 0;

@@ -45,8 +45,8 @@ run: $(SRC)
 	@$(CC) $(SRC) $(SDL_FLAGS) $(SDL_IMG_FLAGS) $(SDL_TTF_FLAGS) $(SDL_MIX_FLAGS) $(LUA_FLAGS) $(CFLAGS) -o $(DST)
 	@mkdir $(DST_WINDOWS)/scripts/
 	@mkdir $(DST_WINDOWS)/others/
-	@cp -ri $(SRC_SCRIPT) $(DST_WINDOWS)/scripts/
-	@cp -ri $(SRC_OTHERS) $(DST_WINDOWS)/others/
+#	@cp -ri $(SRC_SCRIPT) $(DST_WINDOWS)/scripts/
+#	@cp -ri $(SRC_OTHERS) $(DST_WINDOWS)/others/
 	@cp $(SRC_DSL_DLL) $(DST_WINDOWS)
 	@cp $(SRC_DSL_IMG_DLL) $(DST_WINDOWS)
 	@cp $(SRC_DSL_TTF_DLL) $(DST_WINDOWS)
