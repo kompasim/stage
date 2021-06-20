@@ -146,3 +146,12 @@ bool is_similar(char *a, char *b)
 {
     return strcmp(to_lowercase(a), to_lowercase(b)) == 0;
 }
+
+char *do_concat(const char *this, const char *that)
+{
+    char* result;
+    result = malloc(strlen(this) + strlen(that));
+    strcpy(result, this);
+    strcat(result, that);
+    return result;
+}

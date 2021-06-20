@@ -15,7 +15,8 @@ void Bridge_create(Bridge *this)
 
 void Bridge_run(Bridge *this, char *path)
 {
-    luaL_dofile(L, path);
+    int result = luaL_dofile(L, path);
+    do_assert(result == 0, do_concat("run lua script file failed, path:", path));
 }
 
 void Bridge_call(Bridge *this, char *funcName)
@@ -112,17 +113,6 @@ void Bridge_notifyWithPoint(Bridge *this, const char *eventName, SDL_Point point
     Bridge_registerTableInt(this, "x", point.x);
     Bridge_registerTableInt(this, "y", point.y);
     lua_pcall(L, 2, 0, 0);
-}
-
-//////////////////////////////////////////////////// test ////////////////////////////////////////////////////////////////
-
-static int luaTestFunc(lua_State* L)
-{
-    double op1 = luaL_checknumber(L,1);
-    double op2 = luaL_checknumber(L,2);
-    printf("luaTestFunc...[%f] [%f]\n", op1, op2);
-    lua_pushnumber(L,op1 - op2);
-    return 1;
 }
 
 //////////////////////////////////////////////////// render ////////////////////////////////////////////////////////////////
@@ -559,9 +549,6 @@ static int luaCancelTimer(lua_State* L)
 
 void Bridge_register(Bridge *this)
 {
-    //
-    // lua_register(L, "testFunc", luaTestFunc);
-    // lua_register(L, "drawPoint", luaDrawPoint);
     // render
     lua_newtable(L);
     Bridge_registerTableFunc(this, "setBlend", luaSetBlend);
