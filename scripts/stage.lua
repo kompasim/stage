@@ -69,6 +69,7 @@ print("lua Stage file ...")
 
 function Stage_start()
     -- print('lua Stage_start [call once when program start] ...')
+    -- self.timerTest()
     -- 
     render.setColor(10, 10, 10, 200)
     render.doClear()
@@ -103,7 +104,7 @@ function Stage_start()
     --
     render.setColor(100, 150, 100, 200)
     self.drawCircle(475, 425, 60)
-    -- 
+    --
     render.doRender()
 end
 
@@ -224,6 +225,19 @@ function self.audioTest()
     elseif paused then
         audio.resumeMusic()
     end
+end
+
+function self.timerTest()
+    local timerId = nil
+    local timerCount = 0
+    timerId = stage.setTimer(1, function()
+        timerCount = timerCount + 1
+        if timerCount == 5 then
+            stage.cancelTimer(timerId)
+        end
+        print("TIMER_IN_LUA:", timerCount)
+        return 500
+    end)
 end
 
 

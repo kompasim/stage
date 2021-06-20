@@ -45,3 +45,19 @@ void saveScreenshot(const char *path, int w, int h)
     SDL_FreeSurface(s);
 }
 
+Uint32 timerCallback(Uint32 interval, void *func)
+{
+    unsigned long long funcId = (unsigned long long)(int *)func;
+    return luaCallTimer(funcId);;
+}
+
+int setTimer(int delay, int func)
+{
+    return SDL_AddTimer(delay, timerCallback, (int *)(unsigned long long)func);
+}
+
+void cancelTimer(int timerId)
+{
+    SDL_RemoveTimer(timerId);
+}
+

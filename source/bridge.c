@@ -532,6 +532,32 @@ static int luaSaveScreenshot(lua_State* L)
     return 0;
 }
 
+lua_State *stt = NULL;
+
+static int luaCallTimer(int func)
+{
+    lua_rawgeti(stt, LUA_REGISTRYINDEX, func);
+    do_assert(lua_pcall(stt, 0, 1, 0) == 0, "timer call failed");
+    return lua_isnumber(stt, -1) ? lua_tointeger(stt, -1) : 0;
+}
+
+static int luaSetTimer(lua_State* L)
+{
+    stt = L;
+    int func = luaL_ref(L, LUA_REGISTRYINDEX);
+    int delay = lua_tointeger(L, -1);
+    int timerId = setTimer(delay, func);
+    lua_pushinteger(L, timerId);
+    return 1;
+}
+
+static int luaCancelTimer(lua_State* L)
+{
+    int timerId = lua_tointeger(stt, -1);
+    cancelTimer(timerId);
+    return 0;
+}
+
 //////////////////////////////////////////////////// register ////////////////////////////////////////////////////////////////
 
 void Bridge_register(Bridge *this)
@@ -599,6 +625,8 @@ void Bridge_register(Bridge *this)
     Bridge_registerTableFunc(this, "setClipboard", luaSetClipboard);
     Bridge_registerTableFunc(this, "getClipboard", luaGetClipboard);
     Bridge_registerTableFunc(this, "saveScreenshot", luaSaveScreenshot);
+    Bridge_registerTableFunc(this, "setTimer", luaSetTimer);
+    Bridge_registerTableFunc(this, "cancelTimer", luaCancelTimer);
     lua_setglobal(this->L, "stage");
 
 }

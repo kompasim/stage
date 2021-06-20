@@ -46,6 +46,7 @@ Bridge *bridge = NULL;
 // functions
 #ifndef HEAD_FUNCTIONS
 
+static int luaCallTimer(int);
 void Bridge_call(Bridge *, char *);
 void Bridge_notifyNoArgs(Bridge *, const char *);
 void Bridge_notifyWithInt(Bridge *, const char *, int);
