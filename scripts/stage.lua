@@ -12,6 +12,8 @@
     -- setClipboard
     -- getClipboard
     -- saveScreenshot
+    -- setTimer
+    -- cancelTimer
 
 --  window
     -- show
