@@ -27,6 +27,7 @@
 
 SDL_Window *window = NULL;
 SDL_Renderer *renderer = NULL;
+lua_State *L = NULL;
 
 typedef struct {
     SDL_Window *window;

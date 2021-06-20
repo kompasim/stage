@@ -9,24 +9,24 @@ Bridge *Bridge_new()
 
 void Bridge_create(Bridge *this)
 {
-    this->L = luaL_newstate();
-    luaL_openlibs(this->L);
+    L = luaL_newstate();
+    luaL_openlibs(L);
 }
 
 void Bridge_run(Bridge *this, char *path)
 {
-    luaL_dofile(this->L, path);
+    luaL_dofile(L, path);
 }
 
 void Bridge_call(Bridge *this, char *funcName)
 {
-    lua_getglobal(this->L, funcName);
-    lua_pcall(this->L, 0, 0, 0);
+    lua_getglobal(L, funcName);
+    lua_pcall(L, 0, 0, 0);
 }
 
 void Bridge_release(Bridge *this)
 {
-    lua_close(this->L);
+    lua_close(L);
 }
 
 void Lua_registerTableFunc(lua_State *L, char *key, lua_CFunction value)
@@ -38,7 +38,7 @@ void Lua_registerTableFunc(lua_State *L, char *key, lua_CFunction value)
 
 void Bridge_registerTableFunc(Bridge *this, char *key, lua_CFunction value)
 {
-    Lua_registerTableFunc(this->L, key, value);
+    Lua_registerTableFunc(L, key, value);
 }
 
 void Lua_registerTableInt(lua_State *L, char *key, int value)
@@ -50,7 +50,7 @@ void Lua_registerTableInt(lua_State *L, char *key, int value)
 
 void Bridge_registerTableInt(Bridge *this, char *key, int value)
 {
-    Lua_registerTableInt(this->L, key, value);
+    Lua_registerTableInt(L, key, value);
 }
 
 void Lua_registerTableNum(lua_State *L, char *key, double value)
@@ -62,7 +62,7 @@ void Lua_registerTableNum(lua_State *L, char *key, double value)
 
 void Bridge_registerTableNum(Bridge *this, char *key, double value)
 {
-    Lua_registerTableNum(this->L, key, value);
+    Lua_registerTableNum(L, key, value);
 }
 
 void Lua_registerRectTable(lua_State *L, SDL_Rect rect)
@@ -80,38 +80,38 @@ void Lua_registerRectTable(lua_State *L, SDL_Rect rect)
 void Bridge_notifyNoArgs(Bridge *this, const char *eventName)
 {
     const char *funcName = "Stage_handle";
-    lua_getglobal(this->L, funcName);
-    lua_pushstring(this->L, eventName);
-    lua_pcall(this->L, 1, 0, 0);
+    lua_getglobal(L, funcName);
+    lua_pushstring(L, eventName);
+    lua_pcall(L, 1, 0, 0);
 }
 
 void Bridge_notifyWithInt(Bridge *this, const char *eventName, int value)
 {
     const char *funcName = "Stage_handle";
-    lua_getglobal(this->L, funcName);
-    lua_pushstring(this->L, eventName);
-    lua_pushinteger(this->L, value);
-    lua_pcall(this->L, 2, 0, 0);
+    lua_getglobal(L, funcName);
+    lua_pushstring(L, eventName);
+    lua_pushinteger(L, value);
+    lua_pcall(L, 2, 0, 0);
 }
 
 void Bridge_notifyWithString(Bridge *this, const char *eventName, const char *value)
 {
     const char *funcName = "Stage_handle";
-    lua_getglobal(this->L, funcName);
-    lua_pushstring(this->L, eventName);
-    lua_pushstring(this->L, value);
-    lua_pcall(this->L, 2, 0, 0);
+    lua_getglobal(L, funcName);
+    lua_pushstring(L, eventName);
+    lua_pushstring(L, value);
+    lua_pcall(L, 2, 0, 0);
 }
 
 void Bridge_notifyWithPoint(Bridge *this, const char *eventName, SDL_Point point)
 {
     const char *funcName = "Stage_handle";
-    lua_getglobal(this->L, funcName);
-    lua_pushstring(this->L, eventName);
-    lua_newtable(this->L);
+    lua_getglobal(L, funcName);
+    lua_pushstring(L, eventName);
+    lua_newtable(L);
     Bridge_registerTableInt(this, "x", point.x);
     Bridge_registerTableInt(this, "y", point.y);
-    lua_pcall(this->L, 2, 0, 0);
+    lua_pcall(L, 2, 0, 0);
 }
 
 //////////////////////////////////////////////////// test ////////////////////////////////////////////////////////////////
@@ -532,18 +532,15 @@ static int luaSaveScreenshot(lua_State* L)
     return 0;
 }
 
-lua_State *stt = NULL;
-
 static int luaCallTimer(int func)
 {
-    lua_rawgeti(stt, LUA_REGISTRYINDEX, func);
-    do_assert(lua_pcall(stt, 0, 1, 0) == 0, "timer call failed");
-    return lua_isnumber(stt, -1) ? lua_tointeger(stt, -1) : 0;
+    lua_rawgeti(L, LUA_REGISTRYINDEX, func);
+    do_assert(lua_pcall(L, 0, 1, 0) == 0, "timer call failed");
+    return lua_isnumber(L, -1) ? lua_tointeger(L, -1) : 0;
 }
 
 static int luaSetTimer(lua_State* L)
 {
-    stt = L;
     int func = luaL_ref(L, LUA_REGISTRYINDEX);
     int delay = lua_tointeger(L, -1);
     int timerId = setTimer(delay, func);
@@ -553,7 +550,7 @@ static int luaSetTimer(lua_State* L)
 
 static int luaCancelTimer(lua_State* L)
 {
-    int timerId = lua_tointeger(stt, -1);
+    int timerId = lua_tointeger(L, -1);
     cancelTimer(timerId);
     return 0;
 }
@@ -563,10 +560,10 @@ static int luaCancelTimer(lua_State* L)
 void Bridge_register(Bridge *this)
 {
     //
-    // lua_register(this->L, "testFunc", luaTestFunc);
-    // lua_register(this->L, "drawPoint", luaDrawPoint);
+    // lua_register(L, "testFunc", luaTestFunc);
+    // lua_register(L, "drawPoint", luaDrawPoint);
     // render
-    lua_newtable(this->L);
+    lua_newtable(L);
     Bridge_registerTableFunc(this, "setBlend", luaSetBlend);
     Bridge_registerTableFunc(this, "doRender", luaDoRender);
     Bridge_registerTableFunc(this, "drawImage", luaDrawImage);
@@ -584,9 +581,9 @@ void Bridge_register(Bridge *this)
     Bridge_registerTableFunc(this, "drawLine", luaDrawLine);
     Bridge_registerTableFunc(this, "drawRect", luaDrawRect);
     Bridge_registerTableFunc(this, "fillRect", luaFillRect);
-    lua_setglobal(this->L, "render");
+    lua_setglobal(L, "render");
     // audio
-    lua_newtable(this->L);
+    lua_newtable(L);
     Bridge_registerTableFunc(this, "initAudio", luaInitAudio);
     Bridge_registerTableFunc(this, "playMusic", luaPlayMusic);
     Bridge_registerTableFunc(this, "stopMusic", luaStopMusic);
@@ -597,9 +594,9 @@ void Bridge_register(Bridge *this)
     Bridge_registerTableFunc(this, "volumeMusic", luaVolumeMusic);
     Bridge_registerTableFunc(this, "playSound", luaPlaySound);
     Bridge_registerTableFunc(this, "destroyAudio", luaDestroyAudio);
-    lua_setglobal(this->L, "audio");
+    lua_setglobal(L, "audio");
     // window
-    lua_newtable(this->L);
+    lua_newtable(L);
     Bridge_registerTableFunc(this, "show", luaShow);
     Bridge_registerTableFunc(this, "hide", luaHide);
     Bridge_registerTableFunc(this, "maximaze", luaMaximaze);
@@ -615,9 +612,9 @@ void Bridge_register(Bridge *this)
     Bridge_registerTableFunc(this, "setCursor", luaSetCursor);
     Bridge_registerTableFunc(this, "setIcon", luaSetIcon);
     Bridge_registerTableFunc(this, "setOpacity", luaSetOpacity);
-    lua_setglobal(this->L, "window");
+    lua_setglobal(L, "window");
     // stage
-    lua_newtable(this->L);
+    lua_newtable(L);
     Bridge_registerTableFunc(this, "getVersion", luaGetVersion);
     Bridge_registerTableFunc(this, "doExit", luaDoExit);
     Bridge_registerTableFunc(this, "doDelay", luaDoDelay);
@@ -627,6 +624,6 @@ void Bridge_register(Bridge *this)
     Bridge_registerTableFunc(this, "saveScreenshot", luaSaveScreenshot);
     Bridge_registerTableFunc(this, "setTimer", luaSetTimer);
     Bridge_registerTableFunc(this, "cancelTimer", luaCancelTimer);
-    lua_setglobal(this->L, "stage");
+    lua_setglobal(L, "stage");
 
 }
